@@ -17,14 +17,13 @@ L = Nx*dx
 W = Ny*dy
 
 H = 5000 # depth of basin
-h = 500 # height of seamount
 
 bathy = np.zeros((Nx,Ny))
 
 for i in range(Nx):
     for j in range(Ny):
         if i!=0 and i!=Nx-1 and j!=0 and j!=Ny-1:
-            bathy[i][j] = -(H-h*np.sin((np.pi*x[i])/L)*np.sin((np.pi*y[j])/W)) 
+            bathy[i][j] = -H
 
 bathy = np.transpose(bathy)
 
