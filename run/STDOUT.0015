@@ -7,8 +7,8 @@
 (PID.TID 0015.0001) 
 (PID.TID 0015.0001) // MITgcmUV version:  checkpoint67v
 (PID.TID 0015.0001) // Build user:        eavesr
-(PID.TID 0015.0001) // Build host:        atmlxint3
-(PID.TID 0015.0001) // Build date:        Fri 19 Feb 12:11:20 GMT 2021
+(PID.TID 0015.0001) // Build host:        atmlxint1
+(PID.TID 0015.0001) // Build date:        Fri 19 Feb 12:24:44 GMT 2021
 (PID.TID 0015.0001) 
 (PID.TID 0015.0001) // =======================================================
 (PID.TID 0015.0001) // Execution Environment parameter file "eedata"
@@ -58,7 +58,7 @@
 (PID.TID 0015.0001) maxLengthPrt1D=   65 /* maxLength of 1D array printed to StdOut */
 (PID.TID 0015.0001) 
 (PID.TID 0015.0001) ======= Starting MPI parallel Run =========
-(PID.TID 0015.0001)  My Processor Name (len:  9 ) = atmlxint3
+(PID.TID 0015.0001)  My Processor Name (len: 10 ) = atmnode011
 (PID.TID 0015.0001)  Located at (  3,  3) on processor grid (0:  3,0:  3)
 (PID.TID 0015.0001)  Origin at  (   187,   187) on global grid (1:   248,1:   248)
 (PID.TID 0015.0001)  North neighbor = processor 0012
@@ -118,7 +118,7 @@
 (PID.TID 0015.0001) > deltaT=5400.0,
 (PID.TID 0015.0001) > pChkptFreq=31104000.0,
 (PID.TID 0015.0001) > chkptFreq=25920000.0,
-(PID.TID 0015.0001) > dumpFreq=864000.0,
+(PID.TID 0015.0001) > dumpFreq=5400.0,
 (PID.TID 0015.0001) > monitorFreq=86400.,
 (PID.TID 0015.0001) > monitorSelect=2,
 (PID.TID 0015.0001) >#-for longer run (3.0 yr):
@@ -810,7 +810,7 @@
 (PID.TID 0015.0001)                   T
 (PID.TID 0015.0001)     ;
 (PID.TID 0015.0001) dumpFreq =   /* Model state write out interval ( s ). */
-(PID.TID 0015.0001)                 8.640000000000000E+05
+(PID.TID 0015.0001)                 5.400000000000000E+03
 (PID.TID 0015.0001)     ;
 (PID.TID 0015.0001) dumpInitAndLast= /* write out Initial & Last iter. model state */
 (PID.TID 0015.0001)                   T
@@ -1168,140 +1168,140 @@
 (PID.TID 0015.0001) 
 (PID.TID 0015.0001) SOLVE_FOR_PRESSURE: putPmEinXvector =    F
  cg2d: Sum(rhs),rhsMax =   0.00000000000000E+00  9.73534067510514E-05
- cg2d: Sum(rhs),rhsMax =  -8.52651282912120E-14  1.15646588905163E-04
- cg2d: Sum(rhs),rhsMax =   7.25108861843182E-11  1.39931053647453E-04
- cg2d: Sum(rhs),rhsMax =   6.62208066160019E-11  1.64461847761120E-04
- cg2d: Sum(rhs),rhsMax =   7.85860265750671E-11  1.90586571594280E-04
- cg2d: Sum(rhs),rhsMax =   9.51265732851425E-11  2.17121091523138E-04
- cg2d: Sum(rhs),rhsMax =   1.03498543069236E-10  2.43535818497525E-04
- cg2d: Sum(rhs),rhsMax =   1.12341247415770E-10  2.69692400568353E-04
- cg2d: Sum(rhs),rhsMax =   1.21437970790339E-10  2.95542881736034E-04
- cg2d: Sum(rhs),rhsMax =   1.28405730492887E-10  3.21083681785382E-04
+ cg2d: Sum(rhs),rhsMax =  -2.13162820728030E-14  1.15646588905165E-04
+ cg2d: Sum(rhs),rhsMax =   7.34381444544852E-11  1.39931053647454E-04
+ cg2d: Sum(rhs),rhsMax =   6.94413415658346E-11  1.64461847761115E-04
+ cg2d: Sum(rhs),rhsMax =   8.13953349165786E-11  1.90586571594283E-04
+ cg2d: Sum(rhs),rhsMax =   9.89603954337781E-11  2.17121091523143E-04
+ cg2d: Sum(rhs),rhsMax =   1.07481801236986E-10  2.43535818497570E-04
+ cg2d: Sum(rhs),rhsMax =   1.15199405570365E-10  2.69692400568323E-04
+ cg2d: Sum(rhs),rhsMax =   1.22870602581315E-10  2.95542881735988E-04
+ cg2d: Sum(rhs),rhsMax =   1.29077193378180E-10  3.21083681785351E-04
 (PID.TID 0015.0001) %CHECKPOINT        10 ckptA
 (PID.TID 0015.0001)   Seconds in section "ALL                    [THE_MODEL_MAIN]":
-(PID.TID 0015.0001)           User time:   16.5406592488289
+(PID.TID 0015.0001)           User time:   156.498056963086
 (PID.TID 0015.0001)         System time:  0.000000000000000E+000
-(PID.TID 0015.0001)     Wall clock time:   20.7444078922272
+(PID.TID 0015.0001)     Wall clock time:   323.271427154541
 (PID.TID 0015.0001)          No. starts:           1
 (PID.TID 0015.0001)           No. stops:           1
 (PID.TID 0015.0001)   Seconds in section "INITIALISE_FIXED       [THE_MODEL_MAIN]":
-(PID.TID 0015.0001)           User time:   14.1872583031654
+(PID.TID 0015.0001)           User time:   1.32644599676132
 (PID.TID 0015.0001)         System time:  0.000000000000000E+000
-(PID.TID 0015.0001)     Wall clock time:   17.7187218666077
+(PID.TID 0015.0001)     Wall clock time:   2.99121999740601
 (PID.TID 0015.0001)          No. starts:           1
 (PID.TID 0015.0001)           No. stops:           1
 (PID.TID 0015.0001)   Seconds in section "THE_MAIN_LOOP          [THE_MODEL_MAIN]":
-(PID.TID 0015.0001)           User time:   2.35335254669189
+(PID.TID 0015.0001)           User time:   155.171538710594
 (PID.TID 0015.0001)         System time:  0.000000000000000E+000
-(PID.TID 0015.0001)     Wall clock time:   3.02565097808838
+(PID.TID 0015.0001)     Wall clock time:   320.279886007309
 (PID.TID 0015.0001)          No. starts:           1
 (PID.TID 0015.0001)           No. stops:           1
 (PID.TID 0015.0001)   Seconds in section "INITIALISE_VARIA    [THE_MAIN_LOOP]":
-(PID.TID 0015.0001)           User time:   1.58118534088135
+(PID.TID 0015.0001)           User time:  0.729586124420166
 (PID.TID 0015.0001)         System time:  0.000000000000000E+000
-(PID.TID 0015.0001)     Wall clock time:   2.21701788902283
+(PID.TID 0015.0001)     Wall clock time:   1.57970190048218
 (PID.TID 0015.0001)          No. starts:           1
 (PID.TID 0015.0001)           No. stops:           1
 (PID.TID 0015.0001)   Seconds in section "MAIN LOOP           [THE_MAIN_LOOP]":
-(PID.TID 0015.0001)           User time:  0.772138595581055
+(PID.TID 0015.0001)           User time:   154.441916465759
 (PID.TID 0015.0001)         System time:  0.000000000000000E+000
-(PID.TID 0015.0001)     Wall clock time:  0.808602094650269
+(PID.TID 0015.0001)     Wall clock time:   318.700155973434
 (PID.TID 0015.0001)          No. starts:           1
 (PID.TID 0015.0001)           No. stops:           1
 (PID.TID 0015.0001)   Seconds in section "MAIN_DO_LOOP        [THE_MAIN_LOOP]":
-(PID.TID 0015.0001)           User time:  0.772039413452148
+(PID.TID 0015.0001)           User time:   154.441823482513
 (PID.TID 0015.0001)         System time:  0.000000000000000E+000
-(PID.TID 0015.0001)     Wall clock time:  0.808494567871094
+(PID.TID 0015.0001)     Wall clock time:   318.700054645538
 (PID.TID 0015.0001)          No. starts:          10
 (PID.TID 0015.0001)           No. stops:          10
 (PID.TID 0015.0001)   Seconds in section "FORWARD_STEP        [MAIN_DO_LOOP]":
-(PID.TID 0015.0001)           User time:  0.771839141845703
+(PID.TID 0015.0001)           User time:   154.441660165787
 (PID.TID 0015.0001)         System time:  0.000000000000000E+000
-(PID.TID 0015.0001)     Wall clock time:  0.808292865753174
+(PID.TID 0015.0001)     Wall clock time:   318.699871063232
 (PID.TID 0015.0001)          No. starts:          10
 (PID.TID 0015.0001)           No. stops:          10
 (PID.TID 0015.0001)   Seconds in section "LOAD_FIELDS_DRIVER  [FORWARD_STEP]":
-(PID.TID 0015.0001)           User time:  2.822875976562500E-004
+(PID.TID 0015.0001)           User time:  2.644062042236328E-004
 (PID.TID 0015.0001)         System time:  0.000000000000000E+000
-(PID.TID 0015.0001)     Wall clock time:  2.946853637695312E-004
+(PID.TID 0015.0001)     Wall clock time:  2.737045288085938E-004
 (PID.TID 0015.0001)          No. starts:          10
 (PID.TID 0015.0001)           No. stops:          10
 (PID.TID 0015.0001)   Seconds in section "EXTERNAL_FLDS_LOAD [LOAD_FLDS_DRIVER]":
-(PID.TID 0015.0001)           User time:  9.918212890625000E-005
+(PID.TID 0015.0001)           User time:  1.003742218017578E-004
 (PID.TID 0015.0001)         System time:  0.000000000000000E+000
-(PID.TID 0015.0001)     Wall clock time:  9.560585021972656E-005
+(PID.TID 0015.0001)     Wall clock time:  9.179115295410156E-005
 (PID.TID 0015.0001)          No. starts:          10
 (PID.TID 0015.0001)           No. stops:          10
 (PID.TID 0015.0001)   Seconds in section "DO_ATMOSPHERIC_PHYS [FORWARD_STEP]":
-(PID.TID 0015.0001)           User time:  9.346008300781250E-005
+(PID.TID 0015.0001)           User time:  9.489059448242188E-005
 (PID.TID 0015.0001)         System time:  0.000000000000000E+000
-(PID.TID 0015.0001)     Wall clock time:  9.560585021972656E-005
+(PID.TID 0015.0001)     Wall clock time:  1.006126403808594E-004
 (PID.TID 0015.0001)          No. starts:          10
 (PID.TID 0015.0001)           No. stops:          10
 (PID.TID 0015.0001)   Seconds in section "DO_OCEANIC_PHYS     [FORWARD_STEP]":
-(PID.TID 0015.0001)           User time:  1.319885253906250E-003
+(PID.TID 0015.0001)           User time:  1.268148422241211E-003
 (PID.TID 0015.0001)         System time:  0.000000000000000E+000
-(PID.TID 0015.0001)     Wall clock time:  1.366138458251953E-003
+(PID.TID 0015.0001)     Wall clock time:  1.364231109619141E-003
 (PID.TID 0015.0001)          No. starts:          10
 (PID.TID 0015.0001)           No. stops:          10
 (PID.TID 0015.0001)   Seconds in section "THERMODYNAMICS      [FORWARD_STEP]":
-(PID.TID 0015.0001)           User time:  7.057189941406250E-004
+(PID.TID 0015.0001)           User time:  6.732940673828125E-004
 (PID.TID 0015.0001)         System time:  0.000000000000000E+000
-(PID.TID 0015.0001)     Wall clock time:  7.290840148925781E-004
+(PID.TID 0015.0001)     Wall clock time:  7.376670837402344E-004
 (PID.TID 0015.0001)          No. starts:          10
 (PID.TID 0015.0001)           No. stops:          10
 (PID.TID 0015.0001)   Seconds in section "DYNAMICS            [FORWARD_STEP]":
-(PID.TID 0015.0001)           User time:  1.318931579589844E-002
+(PID.TID 0015.0001)           User time:  8.184671401977539E-003
 (PID.TID 0015.0001)         System time:  0.000000000000000E+000
-(PID.TID 0015.0001)     Wall clock time:  1.353240013122559E-002
+(PID.TID 0015.0001)     Wall clock time:  8.795976638793945E-003
 (PID.TID 0015.0001)          No. starts:          10
 (PID.TID 0015.0001)           No. stops:          10
 (PID.TID 0015.0001)   Seconds in section "SOLVE_FOR_PRESSURE  [FORWARD_STEP]":
-(PID.TID 0015.0001)           User time:  0.615148544311523
+(PID.TID 0015.0001)           User time:   151.790713071823
 (PID.TID 0015.0001)         System time:  0.000000000000000E+000
-(PID.TID 0015.0001)     Wall clock time:  0.623239517211914
+(PID.TID 0015.0001)     Wall clock time:   313.291753768921
 (PID.TID 0015.0001)          No. starts:          10
 (PID.TID 0015.0001)           No. stops:          10
 (PID.TID 0015.0001)   Seconds in section "MOM_CORRECTION_STEP [FORWARD_STEP]":
-(PID.TID 0015.0001)           User time:  1.001358032226562E-003
+(PID.TID 0015.0001)           User time:  9.107589721679688E-004
 (PID.TID 0015.0001)         System time:  0.000000000000000E+000
-(PID.TID 0015.0001)     Wall clock time:  1.013755798339844E-003
+(PID.TID 0015.0001)     Wall clock time:  9.782314300537109E-004
 (PID.TID 0015.0001)          No. starts:          10
 (PID.TID 0015.0001)           No. stops:          10
 (PID.TID 0015.0001)   Seconds in section "INTEGR_CONTINUITY   [FORWARD_STEP]":
-(PID.TID 0015.0001)           User time:  6.237030029296875E-004
+(PID.TID 0015.0001)           User time:  5.407333374023438E-004
 (PID.TID 0015.0001)         System time:  0.000000000000000E+000
-(PID.TID 0015.0001)     Wall clock time:  6.291866302490234E-004
+(PID.TID 0015.0001)     Wall clock time:  5.915164947509766E-004
 (PID.TID 0015.0001)          No. starts:          10
 (PID.TID 0015.0001)           No. stops:          10
 (PID.TID 0015.0001)   Seconds in section "TRC_CORRECTION_STEP [FORWARD_STEP]":
-(PID.TID 0015.0001)           User time:  1.029968261718750E-004
+(PID.TID 0015.0001)           User time:  8.583068847656250E-005
 (PID.TID 0015.0001)         System time:  0.000000000000000E+000
-(PID.TID 0015.0001)     Wall clock time:  1.018047332763672E-004
+(PID.TID 0015.0001)     Wall clock time:  9.918212890625000E-005
 (PID.TID 0015.0001)          No. starts:          10
 (PID.TID 0015.0001)           No. stops:          10
 (PID.TID 0015.0001)   Seconds in section "BLOCKING_EXCHANGES  [FORWARD_STEP]":
-(PID.TID 0015.0001)           User time:  1.365661621093750E-003
+(PID.TID 0015.0001)           User time:  0.302677154541016
 (PID.TID 0015.0001)         System time:  0.000000000000000E+000
-(PID.TID 0015.0001)     Wall clock time:  1.389503479003906E-003
+(PID.TID 0015.0001)     Wall clock time:  0.573654174804688
 (PID.TID 0015.0001)          No. starts:          10
 (PID.TID 0015.0001)           No. stops:          10
 (PID.TID 0015.0001)   Seconds in section "MONITOR             [FORWARD_STEP]":
-(PID.TID 0015.0001)           User time:  1.029968261718750E-004
+(PID.TID 0015.0001)           User time:  9.727478027343750E-005
 (PID.TID 0015.0001)         System time:  0.000000000000000E+000
-(PID.TID 0015.0001)     Wall clock time:  1.029968261718750E-004
+(PID.TID 0015.0001)     Wall clock time:  9.632110595703125E-005
 (PID.TID 0015.0001)          No. starts:          10
 (PID.TID 0015.0001)           No. stops:          10
 (PID.TID 0015.0001)   Seconds in section "DO_THE_MODEL_IO     [FORWARD_STEP]":
-(PID.TID 0015.0001)           User time:  4.729461669921875E-002
+(PID.TID 0015.0001)           User time:   2.14061164855957
 (PID.TID 0015.0001)         System time:  0.000000000000000E+000
-(PID.TID 0015.0001)     Wall clock time:  5.900502204895020E-002
+(PID.TID 0015.0001)     Wall clock time:   4.42788958549500
 (PID.TID 0015.0001)          No. starts:          10
 (PID.TID 0015.0001)           No. stops:          10
 (PID.TID 0015.0001)   Seconds in section "DO_WRITE_PICKUP     [FORWARD_STEP]":
-(PID.TID 0015.0001)           User time:  8.919334411621094E-002
+(PID.TID 0015.0001)           User time:  0.194253921508789
 (PID.TID 0015.0001)         System time:  0.000000000000000E+000
-(PID.TID 0015.0001)     Wall clock time:  0.105390548706055
+(PID.TID 0015.0001)     Wall clock time:  0.392206907272339
 (PID.TID 0015.0001)          No. starts:          10
 (PID.TID 0015.0001)           No. stops:          10
 (PID.TID 0015.0001) // ======================================================
@@ -1319,9 +1319,9 @@
 (PID.TID 0015.0001) //          Total. Y spins =              0
 (PID.TID 0015.0001) //            Avg. Y spins =       0.00E+00
 (PID.TID 0015.0001) // o Thread number: 000001
-(PID.TID 0015.0001) //            No. barriers =          31134
+(PID.TID 0015.0001) //            No. barriers =          31278
 (PID.TID 0015.0001) //      Max. barrier spins =              1
 (PID.TID 0015.0001) //      Min. barrier spins =              1
-(PID.TID 0015.0001) //     Total barrier spins =          31134
+(PID.TID 0015.0001) //     Total barrier spins =          31278
 (PID.TID 0015.0001) //      Avg. barrier spins =       1.00E+00
 PROGRAM MAIN: Execution ended Normally
