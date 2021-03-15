@@ -3057,6 +3057,42 @@ C     myThid   :: my Thread Id number
 CEOP
 
 
+C     !LOCAL VARIABLES:
+C     == Local variables ==
+C     i,j      :: Loop counters
+C     tmpFld   :: temporary working array
+      INTEGER i,j
+      Real*8 tmpFld(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
+
+C---+----1----+----2----+----3----+----4----+----5----+----6----+----7-|--+----|
+
+      IF ( k.GE.2 .AND. MOD(diagRho,8).GE.4 ) THEN
+C--   Diagnose Vertical velocity times vertical difference
+C     of potential density reference at level below (i.e. level k)
+        DO j=1,sNy
+         DO i=1,sNx
+           tmpFld(i,j) = wFld(i,j,k,bi,bj)
+     &                 *( rho3d(i,j,k) - rhoKm1(i,j) )*rkSign
+         ENDDO
+        ENDDO
+        CALL DIAGNOSTICS_FILL(tmpFld,'WdRHO_P ',k,1,2,bi,bj,myThid)
+        IF ( k.EQ.2 ) CALL DIAGNOSTICS_COUNT('WdRHO_P ',bi,bj,myThid)
+      ENDIF
+
+      IF ( k.GE.2 .AND. diagRho.GE.8 ) THEN
+C--   Diagnose Vertical velocity times vertical difference
+C     of density at fixed Temp & Salt (from level above, i.e. level k-1)
+        DO j=1,sNy
+         DO i=1,sNx
+           tmpFld(i,j) = wFld(i,j,k,bi,bj)
+     &                 *( rhoKm1(i,j) - rho3d(i,j,k-1) )*rkSign
+         ENDDO
+        ENDDO
+        CALL DIAGNOSTICS_FILL(tmpFld,'WdRHOdP ',k,1,2,bi,bj,myThid)
+        IF ( k.EQ.2 ) CALL DIAGNOSTICS_COUNT('WdRHOdP ',bi,bj,myThid)
+      ENDIF
+
+
       RETURN
       END
 
@@ -5699,6 +5735,87 @@ C     myThid   :: my Thread Id number
       Real*8 myTime
       INTEGER myIter, myThid
 CEOP
+
+C     !FUNCTIONS:
+      LOGICAL  DIAGNOSTICS_IS_ON
+      EXTERNAL DIAGNOSTICS_IS_ON
+
+C     !LOCAL VARIABLES:
+C     == Local variables ==
+C     i,j      :: Loop counters
+C     k, bi,bj :: level & tile indices
+C     tmpFld   :: temporary working array
+      INTEGER i,j
+      INTEGER k, bi,bj
+      Real*8 tmpFld(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
+      Real*8 tmpFac
+
+C---+----1----+----2----+----3----+----4----+----5----+----6----+----7-|--+----|
+
+      CALL DIAGNOSTICS_FILL( rho3d, 'RHOAnoma',
+     &                               0, Nr, 0, 1, 1, myThid )
+      tmpFac = 1.D0
+      CALL DIAGNOSTICS_SCALE_FILL( rho3d, tmpFac, 2,
+     &                   'RHOANOSQ', 0, Nr, 0, 1, 1, myThid )
+
+      IF ( DIAGNOSTICS_IS_ON('URHOMASS',myThid) ) THEN
+       DO bj=myByLo(myThid),myByHi(myThid)
+        DO bi=myBxLo(myThid),myBxHi(myThid)
+         DO k=1,Nr
+          DO j=1,sNy
+           DO i=1,sNx+1
+             tmpFld(i,j) = uFld(i,j,k,bi,bj)*hFacW(i,j,k,bi,bj)
+     &                   *(rho3d(i-1,j,k,bi,bj)+rho3d(i,j,k,bi,bj))
+     &                   *0.5D0
+           ENDDO
+          ENDDO
+          CALL DIAGNOSTICS_FILL(tmpFld,'URHOMASS',k,1,2,bi,bj,myThid)
+         ENDDO
+        ENDDO
+       ENDDO
+      ENDIF
+
+      IF ( DIAGNOSTICS_IS_ON('VRHOMASS',myThid) ) THEN
+       DO bj=myByLo(myThid),myByHi(myThid)
+        DO bi=myBxLo(myThid),myBxHi(myThid)
+         DO k=1,Nr
+          DO j=1,sNy+1
+           DO i=1,sNx
+             tmpFld(i,j) = vFld(i,j,k,bi,bj)*hFacS(i,j,k,bi,bj)
+     &                   *(rho3d(i,j-1,k,bi,bj)+rho3d(i,j,k,bi,bj))
+     &                   *0.5D0
+           ENDDO
+          ENDDO
+          CALL DIAGNOSTICS_FILL(tmpFld,'VRHOMASS',k,1,2,bi,bj,myThid)
+         ENDDO
+        ENDDO
+       ENDDO
+      ENDIF
+
+      IF ( DIAGNOSTICS_IS_ON('WRHOMASS',myThid) ) THEN
+       DO bj=myByLo(myThid),myByHi(myThid)
+        DO bi=myBxLo(myThid),myBxHi(myThid)
+         DO k=1,Nr
+          IF ( k.EQ.1 ) THEN
+           DO j=1,sNy
+            DO i=1,sNx
+             tmpFld(i,j) = wFld(i,j,k,bi,bj)*rho3d(i,j,k,bi,bj)
+            ENDDO
+           ENDDO
+          ELSE
+           DO j=1,sNy
+            DO i=1,sNx
+             tmpFld(i,j) = wFld(i,j,k,bi,bj)
+     &                   *(rho3d(i,j,k-1,bi,bj)+rho3d(i,j,k,bi,bj))
+     &                   *0.5D0
+            ENDDO
+           ENDDO
+          ENDIF
+          CALL DIAGNOSTICS_FILL(tmpFld,'WRHOMASS',k,1,2,bi,bj,myThid)
+         ENDDO
+        ENDDO
+       ENDDO
+      ENDIF
 
 
       RETURN

@@ -3374,6 +3374,12 @@ c     Real*8 e5d(1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr)
       Real*8 cDrag (1-OLx:sNx+OLx,1-OLy:sNy+OLy)
       Real*8 KE2d  (1-OLx:sNx+OLx,1-OLy:sNy+OLy)
       Real*8 rCenter, rUpwind, upwindFac
+      CHARACTER*8 diagName
+      LOGICAL     DIAGNOSTICS_IS_ON
+      EXTERNAL    DIAGNOSTICS_IS_ON
+      Real*8 recip_dT
+      Real*8 delUdt(1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr)
+      Real*8 vf    (1-OLx:sNx+OLx,1-OLy:sNy+OLy)
 CEOP
 
 C---+----1----+----2----+----3----+----4----+----5----+----6----+----7-|--+----|
@@ -3399,6 +3405,16 @@ c        e5d(i,j,k) = 0.D0
          cDrag(i,j) = 0.D0
        ENDDO
       ENDDO
+      IF ( useDiagnostics .AND. ( implicitViscosity .OR.
+     &                            selectImplicitDrag.GE.1 ) ) THEN
+       DO k=1,Nr
+        DO j=1-OLy,sNy+OLy
+         DO i=1-OLx,sNx+OLx
+           delUdt(i,j,k) = gU(i,j,k,bi,bj)
+         ENDDO
+        ENDDO
+       ENDDO
+      ENDIF
 
       IF ( implicitViscosity .AND. Nr.GT.1 ) THEN
 
@@ -3592,6 +3608,52 @@ C--   Solve tri-diagonal system :
       ENDIF
 
 
+C--   Diagnostics of momentum dissipation/viscous tendency, implicit part:
+      IF ( useDiagnostics .AND. ( implicitViscosity .OR.
+     &                            selectImplicitDrag.GE.1 ) ) THEN
+       diagName = 'Um_ImplD'
+       IF ( DIAGNOSTICS_IS_ON(diagName,myThid) ) THEN
+         recip_dT = 0.D0
+         IF ( deltaTMom.GT.zeroRL ) recip_dT = oneRL / deltaTMom
+         DO k=1,Nr
+          DO j=1-OLy,sNy+OLy
+           DO i=1-OLx,sNx+OLx
+            delUdt(i,j,k) = ( gU(i,j,k,bi,bj)-delUdt(i,j,k) )*recip_dT
+           ENDDO
+          ENDDO
+         ENDDO
+         CALL DIAGNOSTICS_FILL(delUdt,diagName, 0,Nr, 2,bi,bj, myThid)
+       ENDIF
+      ENDIF
+
+C--   Diagnostics of vertical viscous flux:
+      IF ( useDiagnostics .AND. implicitViscosity ) THEN
+       diagName = 'VISrI_Um'
+       IF ( DIAGNOSTICS_IS_ON(diagName,myThid) ) THEN
+         DO k= 1,Nr
+          IF ( k.EQ.1 ) THEN
+C-  Note: Needs to call DIAGNOSTICS_FILL at level k=1 even if array == 0
+C         otherwise counter is not incremented !!
+            DO j=1-OLy,sNy+OLy
+             DO i=1-OLx,sNx+OLx
+               vf(i,j) = 0.D0
+             ENDDO
+            ENDDO
+          ELSE
+            DO j=jMin,jMax
+             DO i=iMin,iMax
+               vf(i,j) = -rAw(i,j,bi,bj)*deepFac2F(k)*rhoFacF(k)
+     &            * kappaRU(i,j,k)*recip_drC(k)*rkSign
+     &            * (gU(i,j,k,bi,bj) - gU(i,j,k-1,bi,bj))
+     &            *maskW(i,j,k,bi,bj)
+     &            *maskW(i,j,k-1,bi,bj)
+             ENDDO
+            ENDDO
+          ENDIF
+          CALL DIAGNOSTICS_FILL(vf,diagName, k,1, 2,bi,bj, myThid)
+         ENDDO
+       ENDIF
+      ENDIF
 
       RETURN
       END

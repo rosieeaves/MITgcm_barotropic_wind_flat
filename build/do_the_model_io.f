@@ -2043,6 +2043,8 @@ C     Write model state to binary file
 
 C-- added by RPA
 
+      IF ( useDiagnostics )
+     &     CALL DIAGNOSTICS_WRITE( modelEnd, myTime, myIter, myThid )
 
       RETURN
       END

@@ -1,1 +1,0 @@
-/home/eavesr/MITgcm/pkg/mdsio/mdsio_segxtorx_2d.F

@@ -1854,6 +1854,41 @@ C     myThid  :: my Thread Id number
       INTEGER myThid
 CEOP
 
+C     !LOCAL VARIABLES:
+C     == Local variables ==
+C     selectVars :: select which group of dianostics variables to fill-in
+C            = 1 :: fill-in diagnostics for tracer   variables only
+C            = 2 :: fill-in diagnostics for momentum variables only
+C            = 3 :: fill-in diagnostics for momentum & tracer variables
+C            = 4 :: fill-in state variable tendency diagnostics the second time
+      INTEGER selectVars
+
+C--   Fill-in Diagnostics pkg storage array (for state-variables)
+      IF ( usediagnostics ) THEN
+
+C-    select which group of state-var diagnostics to fill-in,
+C      depending on: where this S/R is called from (seqFlag)
+C                    and stagger/synchronous TimeStep
+        selectVars = 0
+        IF ( staggerTimeStep ) THEN
+          IF ( seqFlag.EQ.0 ) selectVars = 2
+          IF ( seqFlag.EQ.1 ) selectVars = 1
+        ELSE
+          IF ( seqFlag.EQ.0 ) selectVars = 3
+        ENDIF
+        IF ( seqFlag.EQ.2 ) selectVars = 4
+        CALL DIAGNOSTICS_FILL_STATE( selectVars, myIter, myThid )
+
+
+
+
+
+
+
+
+
+
+      ENDIf
 
       RETURN
       END

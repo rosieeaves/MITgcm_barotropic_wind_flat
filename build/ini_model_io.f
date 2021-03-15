@@ -2241,6 +2241,7 @@ C-    MNC model-io initialisation
 
 
 
+      IF ( useDiagnostics ) CALL DIAGNOSTICS_INI_IO( myThid )
 
 C--   Initialise MONITOR I/O streams so we can report config. info
       CALL MON_INIT( myThid )

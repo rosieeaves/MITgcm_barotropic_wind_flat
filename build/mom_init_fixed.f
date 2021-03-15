@@ -3183,6 +3183,9 @@ C-     end bi,bj loops
       ENDDO
 
 
+      IF ( useDiagnostics ) THEN
+        CALL MOM_DIAGNOSTICS_INIT( myThid )
+      ENDIF
 
       RETURN
       END

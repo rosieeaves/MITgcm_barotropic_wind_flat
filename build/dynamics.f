@@ -3407,6 +3407,8 @@ C     myThid :: Thread number for this instance of the routine.
       INTEGER myThid
 
 C     !FUNCTIONS:
+c     LOGICAL  DIAGNOSTICS_IS_ON
+c     EXTERNAL DIAGNOSTICS_IS_ON
 
 C     !LOCAL VARIABLES:
 C     == Local variables
@@ -3454,6 +3456,8 @@ C                   are switched with k to be the appropriate index into fVerU,V
       PARAMETER( iMin = 0 , iMax = sNx+1 )
       PARAMETER( jMin = 0 , jMax = sNy+1 )
 
+c     LOGICAL dPhiHydDiagIsOn
+      Real*8 tmpFac
 
 C---    The algorithm...
 C
@@ -3500,8 +3504,11 @@ C         (1 + dt * K * d_zz) salt[n] = salt*
 C---
 CEOP
 
-      IF (debugMode) CALL DEBUG_ENTER( 'DYNAMICS', myThid )
 
+c     dPhiHydDiagIsOn = .FALSE.
+c     IF ( useDiagnostics )
+c    &  dPhiHydDiagIsOn = DIAGNOSTICS_IS_ON( 'Um_dPHdx', myThid )
+c    &               .OR. DIAGNOSTICS_IS_ON( 'Vm_dPHdy', myThid )
 
 C-- Call to routine for calculation of Eliassen-Palm-flux-forced
 C    U-tendency, if desired:
@@ -3611,13 +3618,6 @@ C        and step forward storing the result in gU, gV, etc...
      O         guDissip, gvDissip,
      I         myTime, myIter, myThid)
            ELSE
-             CALL MOM_VECINV(
-     I         bi,bj,k,iMin,iMax,jMin,jMax,
-     I         kappaRU, kappaRV,
-     I         fVerU(1-OLx,1-OLy,kUp),   fVerV(1-OLx,1-OLy,kUp),
-     O         fVerU(1-OLx,1-OLy,kDown), fVerV(1-OLx,1-OLy,kDown),
-     O         guDissip, gvDissip,
-     I         myTime, myIter, myThid)
            ENDIF
 
 
@@ -3675,24 +3675,31 @@ C      CALL REMOVE_MEAN_RL( 1, phiHydLow, maskInC, maskInC, rA, drF,
 C     &                     'phiHydLow', myTime, myThid )
 Cml)
 
+      IF ( useDiagnostics ) THEN
 
-      IF ( debugLevel .GE. debLevD ) THEN
-       CALL DEBUG_STATS_RL(1,EtaN,'EtaN (DYNAMICS)',myThid)
-       CALL DEBUG_STATS_RL(Nr,uVel,'Uvel (DYNAMICS)',myThid)
-       CALL DEBUG_STATS_RL(Nr,vVel,'Vvel (DYNAMICS)',myThid)
-       CALL DEBUG_STATS_RL(Nr,wVel,'Wvel (DYNAMICS)',myThid)
-       CALL DEBUG_STATS_RL(Nr,theta,'Theta (DYNAMICS)',myThid)
-       CALL DEBUG_STATS_RL(Nr,salt,'Salt (DYNAMICS)',myThid)
-       CALL DEBUG_STATS_RL(Nr,gU,'Gu (DYNAMICS)',myThid)
-       CALL DEBUG_STATS_RL(Nr,gV,'Gv (DYNAMICS)',myThid)
-       CALL DEBUG_STATS_RL(Nr,guNm1,'GuNm1 (DYNAMICS)',myThid)
-       CALL DEBUG_STATS_RL(Nr,gvNm1,'GvNm1 (DYNAMICS)',myThid)
-       CALL DEBUG_STATS_RL(Nr,gtNm1,'GtNm1 (DYNAMICS)',myThid)
-       CALL DEBUG_STATS_RL(Nr,gsNm1,'GsNm1 (DYNAMICS)',myThid)
+       CALL DIAGNOSTICS_FILL(totPhihyd,'PHIHYD  ',0,Nr,0,1,1,myThid)
+       CALL DIAGNOSTICS_FILL(phiHydLow,'PHIBOT  ',0, 1,0,1,1,myThid)
+       tmpFac = 1.D0
+       CALL DIAGNOSTICS_SCALE_FILL(totPhihyd,tmpFac,2,
+     &                                 'PHIHYDSQ',0,Nr,0,1,1,myThid)
+
+       CALL DIAGNOSTICS_SCALE_FILL(phiHydLow,tmpFac,2,
+     &                                 'PHIBOTSQ',0, 1,0,1,1,myThid)
+
+       IF ( selectImplicitDrag.EQ.0 .AND.
+     &      (  no_slip_bottom
+     &    .OR. selectBotDragQuadr.GE.0
+     &    .OR. bottomDragLinear.NE.0. ) ) THEN
+        CALL DIAGNOSTICS_FILL_RS( botDragU, 'botTauX ',
+     &                            0, 1, 0, 1, 1, myThid )
+        CALL DIAGNOSTICS_FILL_RS( botDragV, 'botTauY ',
+     &                            0, 1, 0, 1, 1, myThid )
+       ENDIF
+
       ENDIF
 
 
-      IF (debugMode) CALL DEBUG_LEAVE( 'DYNAMICS', myThid )
+
 
       RETURN
       END

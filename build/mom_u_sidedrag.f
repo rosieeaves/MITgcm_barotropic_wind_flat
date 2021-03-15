@@ -3171,6 +3171,9 @@ C     from MOM_CALC_VISC, consistent with dissipation in the interior
 C--   end old-version / new-version IF blocks
       ENDIF
 
+      IF (useDiagnostics) THEN
+        CALL DIAGNOSTICS_FILL(uDragTerms,'USidDrag',k,1,2,bi,bj,myThid)
+      ENDIF
 
       RETURN
       END

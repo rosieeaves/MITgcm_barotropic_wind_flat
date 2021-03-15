@@ -3233,6 +3233,10 @@ C--       End DO K=1,Nr
           ENDDO
 
 
+          IF ( myIter.NE.nIter0 .AND. useDiagnostics ) THEN
+            CALL DIAGNOSTICS_FILL( ConvectCount, 'CONVADJ ',
+     I                             0, Nr, 2, bi, bj, myThid )
+          ENDIF
 
 C--   End IF (DIFFERENT_MULTIPLE)
       ENDIF

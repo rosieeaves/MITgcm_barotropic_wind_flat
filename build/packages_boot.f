@@ -2002,25 +2002,20 @@ C--   Short summary of which package is compiled and used
 C----- pkgs with a standard "usePKG" On/Off switch in "data.pkg":
       WRITE(standardMessageUnit,'(2A)') ' --------  pkgs with a',
      & ' standard "usePKG" On/Off switch in "data.pkg":  --------'
+      CALL PACKAGES_PRINT_MSG( useDiagnostics,'Diagnostics', ' ' )
 
 C----- pkgs without standard "usePKG" in "data.pkg":
       WRITE(standardMessageUnit,'(2A)') ' -------- pkgs without',
      & ' standard "usePKG" On/Off switch in "data.pkg":  --------'
-      CALL PACKAGES_PRINT_MSG( useGAD, 'GENERIC_ADVDIFF', 'useGAD' )
       CALL PACKAGES_PRINT_MSG( momStepping,'MOM_COMMON','momStepping' )
-      locFlag = momStepping .AND. vectorInvariantMomentum
-      CALL PACKAGES_PRINT_MSG( locFlag, 'MOM_VECINV',
-     &                                  '+vectorInvariantMomentum' )
       locFlag = momStepping .AND. .NOT.vectorInvariantMomentum
       CALL PACKAGES_PRINT_MSG( locFlag, 'MOM_FLUXFORM',
      &                                  '& not vectorInvariantMom' )
       locFlag = monitorFreq.GT.0.
       CALL PACKAGES_PRINT_MSG( locFlag, 'MONITOR', 'monitorFreq > 0.' )
-      CALL PACKAGES_PRINT_MSG( debugMode, 'DEBUG', 'debugMode' )
 C----- pkgs without a run-time switch:
       locFlag = .TRUE.
       CALL PACKAGES_PRINT_MSG( locFlag, 'RW',        'Used' )
-      CALL PACKAGES_PRINT_MSG( locFlag, 'MDSIO',     'Used' )
 C----- AD related pkgs:
 C----- mysterious pkgs:
 

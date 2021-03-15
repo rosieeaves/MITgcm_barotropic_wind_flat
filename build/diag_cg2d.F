@@ -1,0 +1,1 @@
+/home/eavesr/MITgcm/pkg/diagnostics/diag_cg2d.F

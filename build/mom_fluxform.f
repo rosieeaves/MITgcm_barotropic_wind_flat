@@ -3660,6 +3660,17 @@ C     anelastic: transports are scaled by rhoFacC (~ mass transport)
            ENDIF
          ENDDO
         ENDDO
+        IF ( useDiagnostics ) THEN
+          CALL DIAGNOSTICS_FILL(hDiv,   'momHDiv ',k,1,2,bi,bj,myThid)
+          CALL DIAGNOSTICS_FILL(vort3,  'momVort3',k,1,2,bi,bj,myThid)
+          CALL DIAGNOSTICS_FILL(tension,'Tension ',k,1,2,bi,bj,myThid)
+          CALL DIAGNOSTICS_FILL(strain, 'Strain  ',k,1,2,bi,bj,myThid)
+C     stretching will be zero, unless using QG Leith
+          IF ( viscC2LeithQG.NE.zeroRL ) THEN
+            CALL DIAGNOSTICS_FILL(stretching,
+     I                            'Stretch ',k,1,2,bi,bj,myThid)
+          ENDIF
+        ENDIF
       ENDIF
 
 C---  First call (k=1): compute vertical adv. flux fVerUkm & fVerVkm
@@ -3741,6 +3752,11 @@ C--   Tendency is minus divergence of the fluxes + coriolis + pressure term
          ENDDO
         ENDDO
 
+        IF ( useDiagnostics ) THEN
+          CALL DIAGNOSTICS_FILL( fZon,  'ADVx_Um ',k,1,2,bi,bj,myThid)
+          CALL DIAGNOSTICS_FILL( fMer,  'ADVy_Um ',k,1,2,bi,bj,myThid)
+          CALL DIAGNOSTICS_FILL(fVerUkm,'ADVrE_Um',k,1,2,bi,bj,myThid)
+        ENDIF
 
 
 
@@ -3792,6 +3808,12 @@ C     anelastic: hor.visc.fluxes are not scaled by rhoFac (by vert.visc.flx is)
          ENDDO
         ENDDO
 
+        IF ( useDiagnostics ) THEN
+          CALL DIAGNOSTICS_FILL(fZon, 'VISCx_Um',k,1,2,bi,bj,myThid)
+          CALL DIAGNOSTICS_FILL(fMer, 'VISCy_Um',k,1,2,bi,bj,myThid)
+          IF (.NOT.implicitViscosity)
+     &    CALL DIAGNOSTICS_FILL(fVrUp,'VISrE_Um',k,1,2,bi,bj,myThid)
+        ENDIF
 
 C-- No-slip and drag BCs appear as body forces in cell abutting topography
         IF (no_slip_sides) THEN
@@ -3902,6 +3924,11 @@ C--   Tendency is minus divergence of the fluxes + coriolis + pressure term
          ENDDO
         ENDDO
 
+        IF ( useDiagnostics ) THEN
+          CALL DIAGNOSTICS_FILL( fZon,  'ADVx_Vm ',k,1,2,bi,bj,myThid)
+          CALL DIAGNOSTICS_FILL( fMer,  'ADVy_Vm ',k,1,2,bi,bj,myThid)
+          CALL DIAGNOSTICS_FILL(fVerVkm,'ADVrE_Vm',k,1,2,bi,bj,myThid)
+        ENDIF
 
 
 
@@ -3952,6 +3979,12 @@ C     anelastic: hor.visc.fluxes are not scaled by rhoFac (by vert.visc.flx is)
          ENDDO
         ENDDO
 
+        IF ( useDiagnostics ) THEN
+          CALL DIAGNOSTICS_FILL(fZon, 'VISCx_Vm',k,1,2,bi,bj,myThid)
+          CALL DIAGNOSTICS_FILL(fMer, 'VISCy_Vm',k,1,2,bi,bj,myThid)
+          IF (.NOT.implicitViscosity)
+     &    CALL DIAGNOSTICS_FILL(fVrUp,'VISrE_Vm',k,1,2,bi,bj,myThid)
+        ENDIF
 
 C-- No-slip and drag BCs appear as body forces in cell abutting topography
         IF (no_slip_sides) THEN
@@ -4040,12 +4073,16 @@ C--   Coriolis term (call to CD_CODE_SCHEME has been moved to timestep.F)
           gU(i,j,k,bi,bj) = gU(i,j,k,bi,bj)+fuFac*cf(i,j)
          ENDDO
         ENDDO
+        IF ( useDiagnostics )
+     &    CALL DIAGNOSTICS_FILL(cf,'Um_Cori ',k,1,2,bi,bj,myThid)
         CALL MOM_V_CORIOLIS( bi,bj,k,uFld,cf,myThid )
         DO j=jMin,jMax
          DO i=iMin,iMax
           gV(i,j,k,bi,bj) = gV(i,j,k,bi,bj)+fvFac*cf(i,j)
          ENDDO
         ENDDO
+        IF ( useDiagnostics )
+     &    CALL DIAGNOSTICS_FILL(cf,'Vm_Cori ',k,1,2,bi,bj,myThid)
       ENDIF
 
 C--   3.D Coriolis term (horizontal momentum, Eastward component: -fprime*w)
@@ -4077,6 +4114,13 @@ C--   Set du/dt & dv/dt on boundaries to zero
        ENDDO
       ENDDO
 
+      IF ( useDiagnostics ) THEN
+        CALL DIAGNOSTICS_FILL(KE,    'momKE   ',k,1,2,bi,bj,myThid)
+        CALL DIAGNOSTICS_FILL(gU(1-OLx,1-OLy,k,bi,bj),
+     &                               'Um_Advec',k,1,2,bi,bj,myThid)
+        CALL DIAGNOSTICS_FILL(gV(1-OLx,1-OLy,k,bi,bj),
+     &                               'Vm_Advec',k,1,2,bi,bj,myThid)
+      ENDIF
 
       RETURN
       END

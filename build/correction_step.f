@@ -3110,6 +3110,219 @@ C                     = 0 (not convecting) or 1 (convecting)
       Real*8  IVDConvCount(1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr,nSx,nSy)
 
 
+CBOP
+C     !ROUTINE: FFIELDS.h
+C     !INTERFACE:
+C     include "FFIELDS.h"
+C     !DESCRIPTION:
+C     \bv
+C     *==========================================================*
+C     | FFIELDS.h
+C     | o Model forcing fields
+C     *==========================================================*
+C     | More flexible surface forcing configurations are
+C     | available via, e.g., pkg/exf
+C     *==========================================================*
+C     \ev
+CEOP
+C
+C     fu    :: Zonal surface wind stress in N/m^2
+C              > 0 for increase in uVel, which is west to
+C                  east for cartesian and spherical polar grids
+C              Typical range: -0.5 < fu < 0.5
+C              Southwest C-grid U point
+C
+C     fv    :: Meridional surface wind stress in N/m^2
+C              > 0 for increase in vVel, which is south to
+C                  north for cartesian and spherical polar grids
+C              Typical range: -0.5 < fv < 0.5
+C              Southwest C-grid V point
+C
+C     EmPmR :: Net upward freshwater flux in kg/m2/s
+C              EmPmR = Evaporation - precipitation - runoff
+C              > 0 for increase in salt (ocean salinity)
+C              Typical range: -1e-4 < EmPmR < 1e-4
+C              Southwest C-grid tracer point
+C           NOTE: for backward compatibility EmPmRfile is specified in
+C                 m/s when using external_fields_load.F.  It is converted
+C                 to kg/m2/s by multiplying by rhoConstFresh.
+C
+C  saltFlux :: Net upward salt flux in psu.kg/m^2/s
+C              flux of Salt taken out of the ocean per time unit (second).
+C              Note: a) only used when salty sea-ice forms or melts.
+C                    b) units: when salinity (unit= psu) is expressed
+C                       in g/kg, saltFlux unit becomes g/m^2/s.
+C              > 0 for decrease in SSS.
+C              Southwest C-grid tracer point
+C
+C     Qnet  :: Net upward surface heat flux (including shortwave) in W/m^2
+C              Qnet = latent + sensible + net longwave + net shortwave
+C              > 0 for decrease in theta (ocean cooling)
+C              Typical range: -250 < Qnet < 600
+C              Southwest C-grid tracer point
+C
+C     Qsw   :: Net upward shortwave radiation in W/m^2
+C              Qsw = - ( downward - ice and snow absorption - reflected )
+C              > 0 for decrease in theta (ocean cooling)
+C              Typical range: -350 < Qsw < 0
+C              Southwest C-grid tracer point
+C
+C     SST   :: Sea surface temperature in degrees C for relaxation
+C              Southwest C-grid tracer point
+C
+C     SSS   :: Sea surface salinity in psu for relaxation
+C              Southwest C-grid tracer point
+C
+C     lambdaThetaClimRelax :: Inverse time scale for relaxation ( 1/s ).
+C
+C     lambdaSaltClimRelax :: Inverse time scale for relaxation ( 1/s ).
+
+C     phiTide2d :: vertically uniform (2d-map), time-dependent geopotential
+C                  anomaly (e.g., tidal forcing); Units are m^2/s^2
+C     pLoad :: for the ocean:      atmospheric pressure anomaly (relative to
+C                                   "surf_pRef") at z=eta
+C                Units are           Pa=N/m^2
+C              for the atmosphere (hack): geopotential anomaly of the orography
+C                Units are           m^2/s^2
+C     sIceLoad :: sea-ice loading, expressed in Mass of ice+snow / area unit
+C                Units are           kg/m^2
+C              Note: only used with Sea-Ice & RealFreshWater formulation
+C     addMass  :: source (<0: sink) of fluid in the domain interior
+C                 (generalisation of oceanic real fresh-water flux)
+C                Units are           kg/s  (mass per unit of time)
+C     frictionHeating :: heating caused by friction and momentum dissipation
+C                Units are           in W/m^2 (thickness integrated)
+C     eddyPsiX -Zonal Eddy Streamfunction in m^2/s used in taueddy_external_forcing.F
+C     eddyPsiY -Meridional Streamfunction in m^2/s used in taueddy_external_forcing.F
+C     EfluxY - y-component of Eliassen-Palm flux vector
+C     EfluxP - p-component of Eliassen-Palm flux vector
+
+      COMMON /FFIELDS_fu/ fu
+      COMMON /FFIELDS_fv/ fv
+      COMMON /FFIELDS_Qnet/ Qnet
+      COMMON /FFIELDS_Qsw/ Qsw
+      COMMON /FFIELDS_EmPmR/ EmPmR
+      COMMON /FFIELDS_saltFlux/ saltFlux
+      COMMON /FFIELDS_SST/ SST
+      COMMON /FFIELDS_SSS/ SSS
+      COMMON /FFIELDS_lambdaThetaClimRelax/ lambdaThetaClimRelax
+      COMMON /FFIELDS_lambdaSaltClimRelax/ lambdaSaltClimRelax
+      COMMON /FFIELDS_phiTide/ phiTide2d
+      COMMON /FFIELDS_pLoad/ pLoad
+      COMMON /FFIELDS_sIceLoad/ sIceLoad
+
+      Real*8  fu       (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+      Real*8  fv       (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+      Real*8  Qnet     (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+      Real*8  Qsw      (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+      Real*8  EmPmR    (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+      Real*8  saltFlux (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+      Real*8  SST      (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+      Real*8  SSS      (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+      Real*8  lambdaThetaClimRelax(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+      Real*8  lambdaSaltClimRelax(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+      Real*8  phiTide2d(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+      Real*8  pLoad    (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+      Real*8  sIceLoad (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+
+
+C- jmc: commented out until corresponding (ghost-like) code apparition
+C     dQdT  :: Thermal relaxation coefficient in W/m^2/degrees
+C              Southwest C-grid tracer point
+c     COMMON /FFIELDS_dQdT/ dQdT
+c     Real*8  dQdT   (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+c#ifdef ALLOW_EP_FLUX
+c     COMMON /FFIELDS_eflux/ EfluxY,EfluxP
+c     Real*8  EfluxY (1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr,nSx,nSy)
+c     Real*8  EfluxP (1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr,nSx,nSy)
+c#endif
+
+
+C     loadedRec     :: time-record currently loaded (in temp arrays *[1])
+C     taux[0,1]     :: Temp. for zonal wind stress
+C     tauy[0,1]     :: Temp. for merid. wind stress
+C     Qnet[0,1]     :: Temp. for heat flux
+C     EmPmR[0,1]    :: Temp. for fresh water flux
+C     saltFlux[0,1] :: Temp. for isurface salt flux
+C     SST[0,1]      :: Temp. for theta climatalogy
+C     SSS[0,1]      :: Temp. for theta climatalogy
+C     Qsw[0,1]      :: Temp. for short wave component of heat flux
+C     pLoad[0,1]    :: Temp. for atmospheric pressure at z=eta
+C     [0,1]         :: End points for interpolation
+
+      COMMON /FFIELDS_I/ loadedRec
+      INTEGER loadedRec(nSx,nSy)
+
+      COMMON /TDFIELDS/
+     &                 taux0, tauy0, Qnet0, EmPmR0, SST0, SSS0,
+     &                 taux1, tauy1, Qnet1, EmPmR1, SST1, SSS1,
+     &                 saltFlux0, saltFlux1
+     &               , pLoad0, pLoad1
+
+      Real*8  taux0    (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+      Real*8  tauy0    (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+      Real*8  Qnet0    (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+      Real*8  EmPmR0   (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+      Real*8  saltFlux0(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+      Real*8  SST0     (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+      Real*8  SSS0     (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+      Real*8  taux1    (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+      Real*8  tauy1    (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+      Real*8  Qnet1    (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+      Real*8  EmPmR1   (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+      Real*8  saltFlux1(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+      Real*8  SST1     (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+      Real*8  SSS1     (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+      Real*8  pLoad0   (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+      Real*8  pLoad1   (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+
+C     surfaceForcingU     units are  r_unit.m/s^2 (=m^2/s^2 if r=z)
+C                -> usage in gU:     gU = gU + surfaceForcingU/drF [m/s^2]
+C     surfaceForcingV     units are  r_unit.m/s^2 (=m^2/s^-2 if r=z)
+C                -> usage in gU:     gV = gV + surfaceForcingV/drF [m/s^2]
+C
+C     surfaceForcingS     units are  r_unit.psu/s (=psu.m/s if r=z)
+C            - EmPmR * S_surf plus salinity relaxation*drF(1)
+C                -> usage in gS:     gS = gS + surfaceForcingS/drF [psu/s]
+C
+C     surfaceForcingT     units are  r_unit.Kelvin/s (=Kelvin.m/s if r=z)
+C            - Qnet (+Qsw) plus temp. relaxation*drF(1)
+C                -> calculate        -lambda*(T(model)-T(clim))
+C            Qnet assumed to be net heat flux including ShortWave rad.
+C                -> usage in gT:     gT = gT + surfaceforcingT/drF [K/s]
+C     adjustColdSST_diag :: diagnostic field for how much too cold (below
+C              Tfreezing) SST has been adjusted (with allowFreezing=T).
+C              > 0 for increase of SST (up to Tfreezing).
+C              Units are r_unit.K/s (=Kelvin.m/s if r=z).
+C        Note: 1) allowFreezing option is a crude hack to fix too cold SST that
+C              results from missing seaice component. It should never be used
+C              with any seaice component, neither current seaice pkg (pkg/seaice
+C              or pkg/thsice) nor a seaice component from atmos model when
+C              coupled to it.
+C              2) this diagnostic is currently used by KPP package (kpp_calc.F
+C              and kpp_transport_t.F) although it is not very clear it should.
+
+      COMMON /SURFACE_FORCING/
+     &                         surfaceForcingU,
+     &                         surfaceForcingV,
+     &                         surfaceForcingT,
+     &                         surfaceForcingS,
+     &                         adjustColdSST_diag
+      Real*8  surfaceForcingU   (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+      Real*8  surfaceForcingV   (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+      Real*8  surfaceForcingT   (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+      Real*8  surfaceForcingS   (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+      Real*8  adjustColdSST_diag(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+
+C     botDragU :: bottom stress (for diagnostics), Zonal component
+C                Units are N/m^2 ;   > 0 increase uVel @ bottom
+C     botDragV :: bottom stress (for diagnostics), Merid. component
+C                Units are N/m^2 ;   > 0 increase vVel @ bottom
+      COMMON /FFIELDS_bottomStress/ botDragU, botDragV
+      Real*8  botDragU (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+      Real*8  botDragV (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
+
+C---+----1----+----2----+----3----+----4----+----5----+----6----+----7-|--+----|
 
 C     !INPUT/OUTPUT PARAMETERS:
 C     == Routine Arguments ==
@@ -3128,6 +3341,8 @@ C     myThid              :: my Thread Id number
       INTEGER myThid
 
 C     !FUNCTIONS:
+      LOGICAL  DIAGNOSTICS_IS_ON
+      EXTERNAL DIAGNOSTICS_IS_ON
 
 C     !LOCAL VARIABLES:
 C     == Local variables ==
@@ -3141,8 +3356,17 @@ C     gV_dpy       :: implicit part of pressure gradient tendency
       Real*8     psFac, nhFac
       Real*8     gU_dpx(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
       Real*8     gV_dpy(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
+      LOGICAL dPhiDiagIsOn, implDisDiagIsOn
 CEOP
 
+      dPhiDiagIsOn = .FALSE.
+      IF ( useDiagnostics )
+     &  dPhiDiagIsOn = DIAGNOSTICS_IS_ON( 'Um_dPhiX', myThid )
+     &            .OR. DIAGNOSTICS_IS_ON( 'Vm_dPhiY', myThid )
+      implDisDiagIsOn = .FALSE.
+      IF ( useDiagnostics )
+     &  implDisDiagIsOn = DIAGNOSTICS_IS_ON( 'Um_ImplD', myThid )
+     &               .OR. DIAGNOSTICS_IS_ON( 'Vm_ImplD', myThid )
 
 C--   Loop over all layers, top to bottom
       DO k=1,Nr
@@ -3188,6 +3412,12 @@ C     Pressure gradient tendency (merid mom): Implicit part
          ENDDO
         ENDIF
 
+        IF ( dPhiDiagIsOn ) THEN
+         CALL DIAGNOSTICS_FILL( gU_dpx,
+     &                         'Um_dPhiX', k, 1, -2, bi, bj, myThid )
+         CALL DIAGNOSTICS_FILL( gV_dpy,
+     &                         'Vm_dPhiY', k, 1, -2, bi, bj, myThid )
+        ENDIF
 
 
 C     Update zonal velocity: add implicit pressure gradient tendency
@@ -3210,6 +3440,55 @@ C     Update merid. velocity: add implicit pressure gradient tendency
 
 C-    end of k loop
       ENDDO
+
+      IF ( useDiagnostics .AND. selectImplicitDrag.EQ.2 ) THEN
+       IF ( DIAGNOSTICS_IS_ON( 'botTauX ', myThid ) ) THEN
+         IF ( usingZCoords ) THEN
+C         kLowC = 0 if dry column
+          DO j=jMin,jMax
+           DO i=iMin,iMax
+            k = MAX( 1, MIN( kLowC(i-1,j,bi,bj), kLowC(i,j,bi,bj) ) )
+            botDragU(i,j,bi,bj) = -botDragU(i,j,bi,bj)
+     &                          * uVel(i,j,k,bi,bj)
+           ENDDO
+          ENDDO
+         ELSE
+C         kSurfW = Nr+1 if dry column
+          DO j=jMin,jMax
+           DO i=iMin,iMax
+            k = MIN( Nr, kSurfW(i,j,bi,bj) )
+            botDragU(i,j,bi,bj) = -botDragU(i,j,bi,bj)
+     &                          * uVel(i,j,k,bi,bj)
+           ENDDO
+          ENDDO
+         ENDIF
+         CALL DIAGNOSTICS_FILL_RS( botDragU, 'botTauX ',
+     &                             0, 1, 1, bi, bj, myThid )
+       ENDIF
+       IF ( DIAGNOSTICS_IS_ON( 'botTauY ', myThid ) ) THEN
+         IF ( usingZCoords ) THEN
+C         kLowC = 0 if dry column
+          DO j=jMin,jMax
+           DO i=iMin,iMax
+            k = MAX( 1, MIN( kLowC(i,j-1,bi,bj), kLowC(i,j,bi,bj) ) )
+            botDragV(i,j,bi,bj) = -botDragV(i,j,bi,bj)
+     &                          * vVel(i,j,k,bi,bj)
+           ENDDO
+          ENDDO
+         ELSE
+C         kSurfS = Nr+1 if dry column
+          DO j=jMin,jMax
+           DO i=iMin,iMax
+            k = MIN( Nr, kSurfS(i,j,bi,bj) )
+            botDragV(i,j,bi,bj) = -botDragV(i,j,bi,bj)
+     &                          * vVel(i,j,k,bi,bj)
+           ENDDO
+          ENDDO
+         ENDIF
+         CALL DIAGNOSTICS_FILL_RS( botDragV, 'botTauY ',
+     &                             0, 1, 1, bi, bj, myThid )
+       ENDIF
+      ENDIF
 
 
       RETURN

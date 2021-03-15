@@ -2026,7 +2026,6 @@ C     == Local variables ==
       INTEGER bi,bj
 CEOP
 
-      IF (debugMode) CALL DEBUG_ENTER('INITIALISE_VARIA',myThid)
 
 
 
@@ -2034,7 +2033,6 @@ C--   Initialise Non-Lin FreeSurf variables:
       CALL INI_NLFS_VARS( myThid )
 
 C--   Initialize DYNVARS arrays (state fields + G terms: Gu,Gv,...) to zero [always]
-      IF (debugMode) CALL DEBUG_CALL('INI_DYNVARS',myThid)
       CALL INI_DYNVARS( myThid )
 
 C--   Initialize NH_VARS arrays to zero [always]
@@ -2046,21 +2044,17 @@ C--   Initialise model fields.
 C     Starting values of U, V, W, temp., salt. and tendency terms
 C     are set here. Fields are either set to default or read from
 C     stored files.
-      IF (debugMode) CALL DEBUG_CALL('INI_FIELDS',myThid)
       CALL INI_FIELDS( myThid )
 
 C--   Initialise 3-dim. diffusivities
-      IF (debugMode) CALL DEBUG_CALL('INI_MIXING',myThid)
       CALL INI_MIXING( myThid )
 
 
 C--   Initialise model forcing fields.
-      IF (debugMode) CALL DEBUG_CALL('INI_FORCING',myThid)
       CALL INI_FORCING( myThid )
 
 
 C--   Initialize variable data for packages
-      IF (debugMode) CALL DEBUG_CALL('PACKAGES_INIT_VARIABLES',myThid)
       CALL PACKAGES_INIT_VARIABLES( myThid )
 
 
@@ -2075,7 +2069,6 @@ c#endif
 
 C--   Initial conditions are convectively adjusted (for historical reasons)
       IF ( startTime .EQ. baseTime .AND. cAdjFreq .NE. 0. ) THEN
-      IF (debugMode) CALL DEBUG_CALL('CONVECTIVE_ADJUSTMENT_INI',myThid)
 CADJ loop = parallel
         DO bj = myByLo(myThid), myByHi(myThid)
 CADJ loop = parallel
@@ -2087,7 +2080,6 @@ CADJ loop = parallel
       ENDIF
 
 
-      IF (debugMode) CALL DEBUG_CALL('INTEGR_CONTINUITY',myThid)
 C--   Integrate continuity vertically for vertical velocity
       CALL INTEGR_CONTINUITY( uVel, vVel,
      I                        startTime, nIter0, myThid )
@@ -2100,19 +2092,15 @@ c     ENDIF
 
 
 C--   Finally summarise the model state
-      IF (debugMode) CALL DEBUG_CALL('STATE_SUMMARY',myThid)
       CALL STATE_SUMMARY( myThid )
 
-      IF (debugMode) CALL DEBUG_CALL('MONITOR',myThid)
 C--   Check status of initial state (statistics, cfl, etc...)
       CALL MONITOR( startTime, nIter0, myThid )
 
 
 C--   Dump initial state to files
-      IF (debugMode) CALL DEBUG_CALL('DO_THE_MODEL_IO',myThid)
       CALL DO_THE_MODEL_IO( .FALSE., startTime, nIter0, myThid )
 
-      IF (debugMode) CALL DEBUG_LEAVE('INITIALISE_VARIA',myThid)
 
 C--   Check barrier synchronization:
       CALL BAR_CHECK( 4, myThid )

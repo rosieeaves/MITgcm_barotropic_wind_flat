@@ -3095,67 +3095,10 @@ C-    Tile Id number = Bi + (Bj-1)*(nSx*nPx)  with tile global-indices Bi,Bj
      &                      SQUEEZE_RIGHT , myThid)
         WRITE(msgBuf,'(A)') '  =>'
 
-        CALL MDS_FACEF_READ_RS( fName, fp, 1,  xC, bi, bj, myThid )
-        iL = ILNBLNK(msgBuf)
-        WRITE(tmpBuf,'(A,1X,A)') msgBuf(1:iL),'xC'
-        CALL MDS_FACEF_READ_RS( fName, fp, 2,  yC, bi, bj, myThid )
-        iL = ILNBLNK(tmpBuf)
-        WRITE(msgBuf,'(A,1X,A)') tmpBuf(1:iL),'yC'
-        CALL MDS_FACEF_READ_RS( fName, fp, 3, dxF, bi, bj, myThid )
-        iL = ILNBLNK(msgBuf)
-        WRITE(tmpBuf,'(A,1X,A)') msgBuf(1:iL),'dxF'
-        CALL MDS_FACEF_READ_RS( fName, fp, 4, dyF, bi, bj, myThid )
-        iL = ILNBLNK(tmpBuf)
-        WRITE(msgBuf,'(A,1X,A)') tmpBuf(1:iL),'dyF'
-        CALL MDS_FACEF_READ_RS( fName, fp, 5,  rA, bi, bj, myThid )
-        iL = ILNBLNK(msgBuf)
-        WRITE(tmpBuf,'(A,1X,A)') msgBuf(1:iL),'rA'
-        CALL MDS_FACEF_READ_RS( fName, fp, 6,  xG, bi, bj, myThid )
-        iL = ILNBLNK(tmpBuf)
-        WRITE(msgBuf,'(A,1X,A)') tmpBuf(1:iL),'xG'
-        CALL MDS_FACEF_READ_RS( fName, fp, 7,  yG, bi, bj, myThid )
-        iL = ILNBLNK(msgBuf)
-        WRITE(tmpBuf,'(A,1X,A)') msgBuf(1:iL),'yG'
-        CALL MDS_FACEF_READ_RS( fName, fp, 8, dxV, bi, bj, myThid )
-        iL = ILNBLNK(tmpBuf)
-        WRITE(msgBuf,'(A,1X,A)') tmpBuf(1:iL),'dxV'
-        CALL MDS_FACEF_READ_RS( fName, fp, 9, dyU, bi, bj, myThid )
-        iL = ILNBLNK(msgBuf)
-        WRITE(tmpBuf,'(A,1X,A)') msgBuf(1:iL),'dyU'
-        CALL MDS_FACEF_READ_RS( fName, fp,10, rAz, bi, bj, myThid )
-        iL = ILNBLNK(tmpBuf)
-        WRITE(msgBuf,'(A,1X,A)') tmpBuf(1:iL),'rAz'
-        CALL MDS_FACEF_READ_RS( fName, fp,11, dxC, bi, bj, myThid )
-        iL = ILNBLNK(msgBuf)
-        WRITE(tmpBuf,'(A,1X,A)') msgBuf(1:iL),'dxC'
-        CALL MDS_FACEF_READ_RS( fName, fp,12, dyC, bi, bj, myThid )
-        iL = ILNBLNK(tmpBuf)
-        WRITE(msgBuf,'(A,1X,A)') tmpBuf(1:iL),'dyC'
-        CALL MDS_FACEF_READ_RS( fName, fp,13, rAw, bi, bj, myThid )
-        iL = ILNBLNK(msgBuf)
-        WRITE(tmpBuf,'(A,1X,A)') msgBuf(1:iL),'rAw'
-        CALL MDS_FACEF_READ_RS( fName, fp,14, rAs, bi, bj, myThid )
-        iL = ILNBLNK(tmpBuf)
-        WRITE(msgBuf,'(A,1X,A)') tmpBuf(1:iL),'rAs'
-        CALL MDS_FACEF_READ_RS( fName, fp,15, dxG, bi, bj, myThid )
-        iL = ILNBLNK(msgBuf)
-        WRITE(tmpBuf,'(A,1X,A)') msgBuf(1:iL),'dxG'
-        CALL MDS_FACEF_READ_RS( fName, fp,16, dyG, bi, bj, myThid )
-        iL = ILNBLNK(tmpBuf)
-        WRITE(msgBuf,'(A,1X,A)') tmpBuf(1:iL),'dyG'
-
-        iLen = ILNBLNK(horizGridFile)
-        IF ( iLen.GT.0 ) THEN
-         CALL MDS_FACEF_READ_RS(fName,fp,17,angleCosC,bi,bj,myThid)
-         iL = ILNBLNK(msgBuf)
-         WRITE(tmpBuf,'(A,1X,A)') msgBuf(1:iL),'AngleCS'
-         CALL MDS_FACEF_READ_RS(fName,fp,18,angleSinC,bi,bj,myThid)
-         iL = ILNBLNK(tmpBuf)
-         WRITE(msgBuf,'(A,1X,A)') tmpBuf(1:iL),'AngleSN'
-         anglesAreSet = .TRUE.
-        ELSE
-         anglesAreSet = .FALSE.
-        ENDIF
+        WRITE(msgBuf,'(2A)')
+     &   'INI_CURVILINEAR_GRID: Needs to compile MDSIO pkg'
+        CALL PRINT_ERROR( msgBuf, myThid )
+        STOP 'ABNORMAL END: S/R INI_CURVILINEAR_GRID'
 
         CALL PRINT_MESSAGE( msgBuf, standardMessageUnit,
      &                      SQUEEZE_RIGHT , myThid)

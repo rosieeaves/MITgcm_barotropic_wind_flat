@@ -2495,12 +2495,10 @@ C--   set default:
       exst     = .TRUE.
       lastdiva = .TRUE.
 
-      IF (debugMode) CALL DEBUG_ENTER('THE_MODEL_MAIN',myThid)
 
 C--   This timer encompasses the whole code
       CALL TIMER_START('ALL                    [THE_MODEL_MAIN]',myThid)
 
-      IF (debugMode) CALL DEBUG_CALL('INITIALISE_FIXED',myThid)
 C--   Set model configuration (fixed arrays)
       CALL TIMER_START('INITIALISE_FIXED       [THE_MODEL_MAIN]',myThid)
       CALL INITIALISE_FIXED( myThid )
@@ -2510,7 +2508,6 @@ C--   Set model configuration (fixed arrays)
       myIter = nIter0
 
 
-      IF (debugMode) CALL DEBUG_CALL('THE_MAIN_LOOP',myThid)
 C--   Call time stepping loop of full model
       CALL TIMER_START('THE_MAIN_LOOP          [THE_MODEL_MAIN]',myThid)
       CALL THE_MAIN_LOOP( myTime, myIter, myThid )
@@ -2531,7 +2528,6 @@ C--   Write timer statistics
 C--   Check threads synchronization :
       CALL BAR_CHECK( 9, myThid )
 
-      IF (debugMode) CALL DEBUG_LEAVE('THE_MODEL_MAIN',myThid)
 
       RETURN
       END

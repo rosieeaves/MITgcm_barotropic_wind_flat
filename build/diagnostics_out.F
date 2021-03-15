@@ -1,0 +1,1 @@
+/home/eavesr/MITgcm/pkg/diagnostics/diagnostics_out.F

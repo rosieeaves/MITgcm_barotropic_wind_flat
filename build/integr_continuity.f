@@ -3586,7 +3586,6 @@ C--   Update etaH (from etaN and dEtaHdt):
       IF (exactConserv) THEN
 c       IF ( useRealFreshWaterFlux .AND. myIter.EQ.nIter0 )
 c    &    CALL EXCH_XY_RL (  PmEpR,  myThid  )
-        IF (debugMode) CALL DEBUG_CALL('UPDATE_ETAH',myThid)
         CALL UPDATE_ETAH( myTime, myIter, myThid )
       ENDIF
 

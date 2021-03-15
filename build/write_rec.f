@@ -1960,11 +1960,6 @@ c     ENDIF
       useCurrentDir = .FALSE.
       fType='RS'
       nNz=1
-      CALL MDS_WRITE_FIELD(
-     I                      fName, writeBinaryPrec,
-     I                      globalFile, useCurrentDir,
-     I                      fType, nNz, 1, nNz, dummyRL, field,
-     I                      iRec, myIter, myThid )
       RETURN
       END
 
@@ -3430,11 +3425,6 @@ c     ENDIF
       useCurrentDir = .FALSE.
       fType='RL'
       nNz=1
-      CALL MDS_WRITE_FIELD(
-     I                      fName, writeBinaryPrec,
-     I                      globalFile, useCurrentDir,
-     I                      fType, nNz, 1, nNz, field, dummyRS,
-     I                      iRec, myIter, myThid )
       RETURN
       END
 
@@ -4900,11 +4890,6 @@ c     ENDIF
       useCurrentDir = .FALSE.
       fType='RS'
       nNz=Nr
-      CALL MDS_WRITE_FIELD(
-     I                      fName, writeBinaryPrec,
-     I                      globalFile, useCurrentDir,
-     I                      fType, nNz, 1, nNz, dummyRL, field,
-     I                      iRec, myIter, myThid )
       RETURN
       END
 
@@ -6370,11 +6355,6 @@ c     ENDIF
       useCurrentDir = .FALSE.
       fType='RL'
       nNz=Nr
-      CALL MDS_WRITE_FIELD(
-     I                      fName, writeBinaryPrec,
-     I                      globalFile, useCurrentDir,
-     I                      fType, nNz, 1, nNz, field, dummyRS,
-     I                      iRec, myIter, myThid )
       RETURN
       END
 
@@ -7843,10 +7823,6 @@ c     ENDIF
 
       useCurrentDir = .FALSE.
       fType='RS'
-      CALL MDS_WRITE_FIELD(
-     I                      fName, fPrec, globalFile, useCurrentDir,
-     I                      fType, nNz, 1, nNz, dummyRL, field,
-     I                      iRec, myIter, myThid )
       RETURN
       END
 
@@ -9315,10 +9291,6 @@ c     ENDIF
 
       useCurrentDir = .FALSE.
       fType='RL'
-      CALL MDS_WRITE_FIELD(
-     I                      fName, fPrec, globalFile, useCurrentDir,
-     I                      fType, nNz, 1, nNz, field, dummyRS,
-     I                      iRec, myIter, myThid )
       RETURN
       END
 
@@ -10788,10 +10760,6 @@ c     ENDIF
 
       useCurrentDir = .FALSE.
       fType='RS'
-      CALL MDS_WRITE_FIELD(
-     I                      fName, fPrec, globalFile, useCurrentDir,
-     I                      fType, kSiz, kLo, kHi, dummyRL, field,
-     I                      iRec, myIter, myThid )
       RETURN
       END
 
@@ -12261,10 +12229,6 @@ c     ENDIF
 
       useCurrentDir = .FALSE.
       fType='RL'
-      CALL MDS_WRITE_FIELD(
-     I                      fName, fPrec, globalFile, useCurrentDir,
-     I                      fType, kSiz, kLo, kHi, field, dummyRS,
-     I                      iRec, myIter, myThid )
       RETURN
       END
 
@@ -13731,11 +13695,6 @@ c     ENDIF
 
       useCurrentDir = .FALSE.
       fType='RS'
-      CALL MDS_WRITE_SEC_XZ(
-     I                       fName, fPrec, globalFile, useCurrentDir,
-     I                       fType, nNz,
-     I                       dummyRL, field,
-     I                       iRec, myIter, myThid )
       RETURN
       END
 
@@ -15203,11 +15162,6 @@ c     ENDIF
 
       useCurrentDir = .FALSE.
       fType='RL'
-      CALL MDS_WRITE_SEC_XZ(
-     I                       fName, fPrec, globalFile, useCurrentDir,
-     I                       fType, nNz,
-     I                       field, dummyRS,
-     I                       iRec, myIter, myThid )
       RETURN
       END
 
@@ -16676,11 +16630,6 @@ c     ENDIF
 
       useCurrentDir = .FALSE.
       fType='RS'
-      CALL MDS_WRITE_SEC_YZ(
-     I                       fName, fPrec, globalFile, useCurrentDir,
-     I                       fType, nNz,
-     I                       dummyRL, field,
-     I                       iRec, myIter, myThid )
       RETURN
       END
 
@@ -18149,10 +18098,5 @@ c     ENDIF
 
       useCurrentDir = .FALSE.
       fType='RL'
-      CALL MDS_WRITE_SEC_YZ(
-     I                       fName, fPrec, globalFile, useCurrentDir,
-     I                       fType, nNz,
-     I                       field, dummyRS,
-     I                       iRec, myIter, myThid )
       RETURN
       END

@@ -1892,11 +1892,6 @@ c     ENDIF
       useCurrentDir = .FALSE.
       fType='RS'
       nNz=1
-      CALL MDS_READ_FIELD(
-     I                     fName, readBinaryPrec, useCurrentDir,
-     I                     fType, nNz, 1, nNz,
-     O                     dummyRL, field,
-     I                     iRec, myThid )
       RETURN
       END
 
@@ -3357,11 +3352,6 @@ c     ENDIF
       useCurrentDir = .FALSE.
       fType='RL'
       nNz=1
-      CALL MDS_READ_FIELD(
-     I                     fName, readBinaryPrec, useCurrentDir,
-     I                     fType, nNz, 1, nNz,
-     O                     field, dummyRS,
-     I                     iRec, myThid )
       RETURN
       END
 
@@ -4823,11 +4813,6 @@ c     ENDIF
       useCurrentDir = .FALSE.
       fType='RS'
       nNz=Nr
-      CALL MDS_READ_FIELD(
-     I                     fName, readBinaryPrec, useCurrentDir,
-     I                     fType, nNz, 1, nNz,
-     O                     dummyRL, field,
-     I                     iRec, myThid )
       RETURN
       END
 
@@ -6289,11 +6274,6 @@ c     ENDIF
       useCurrentDir = .FALSE.
       fType='RL'
       nNz=Nr
-      CALL MDS_READ_FIELD(
-     I                     fName, readBinaryPrec, useCurrentDir,
-     I                     fType, nNz, 1, nNz,
-     O                     field, dummyRS,
-     I                     iRec, myThid )
       RETURN
       END
 
@@ -7759,11 +7739,6 @@ c     ENDIF
 
       useCurrentDir = .FALSE.
       fType='RS'
-      CALL MDS_READ_FIELD(
-     I                     fName, fPrec, useCurrentDir,
-     I                     fType, nNz, 1, nNz,
-     O                     dummyRL, field,
-     I                     iRec, myThid )
       RETURN
       END
 
@@ -9229,11 +9204,6 @@ c     ENDIF
 
       useCurrentDir = .FALSE.
       fType='RL'
-      CALL MDS_READ_FIELD(
-     I                     fName, fPrec, useCurrentDir,
-     I                     fType, nNz, 1, nNz,
-     O                     field, dummyRS,
-     I                     iRec, myThid )
       RETURN
       END
 
@@ -10700,11 +10670,6 @@ c     ENDIF
 
       useCurrentDir = .FALSE.
       fType='RS'
-      CALL MDS_READ_FIELD(
-     I                     fName, fPrec, useCurrentDir,
-     I                     fType, kSiz, kLo, kHi,
-     O                     dummyRL, field,
-     I                     iRec, myThid )
       RETURN
       END
 
@@ -12171,11 +12136,6 @@ c     ENDIF
 
       useCurrentDir = .FALSE.
       fType='RL'
-      CALL MDS_READ_FIELD(
-     I                     fName, fPrec, useCurrentDir,
-     I                     fType, kSiz, kLo, kHi,
-     O                     field, dummyRS,
-     I                     iRec, myThid )
       RETURN
       END
 
@@ -13638,11 +13598,6 @@ c     ENDIF
 
       useCurrentDir = .FALSE.
       fType='RS'
-      CALL MDS_READ_SEC_XZ(
-     I                      fName, fPrec, useCurrentDir,
-     I                      fType, nNz,
-     O                      dummyRL, field,
-     I                      iRec, myThid )
       RETURN
       END
 
@@ -15106,11 +15061,6 @@ c     ENDIF
 
       useCurrentDir = .FALSE.
       fType='RL'
-      CALL MDS_READ_SEC_XZ(
-     I                      fName, fPrec, useCurrentDir,
-     I                      fType, nNz,
-     O                      field, dummyRS,
-     I                      iRec, myThid )
       RETURN
       END
 
@@ -16575,11 +16525,6 @@ c     ENDIF
 
       useCurrentDir = .FALSE.
       fType='RS'
-      CALL MDS_READ_SEC_YZ(
-     I                      fName, fPrec, useCurrentDir,
-     I                      fType, nNz,
-     O                      dummyRL, field,
-     I                      iRec, myThid )
       RETURN
       END
 
@@ -18044,10 +17989,5 @@ c     ENDIF
 
       useCurrentDir = .FALSE.
       fType='RL'
-      CALL MDS_READ_SEC_YZ(
-     I                      fName, fPrec, useCurrentDir,
-     I                      fType, nNz,
-     O                      field, dummyRS,
-     I                      iRec, myThid )
       RETURN
       END

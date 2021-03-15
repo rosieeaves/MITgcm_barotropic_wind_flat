@@ -1,0 +1,1 @@
+/home/eavesr/MITgcm/pkg/diagnostics/diagstats_mnc_out.F

@@ -1948,7 +1948,29 @@ C---  Start with non-standard packages (without or with non standard flag)
         ENDIF
       ENDIF
 
+      IF ( momStepping .AND. vectorInvariantMomentum ) THEN
+        WRITE(msgBuf,'(2A)')
+     &   'PACKAGES_CHECK: cannot step forward Momentum',
+     &   ' without pkg/mom_vecinv'
+        CALL PRINT_ERROR( msgBuf , myThid )
+        WRITE(msgBuf,'(2A)') 'PACKAGES_CHECK: ',
+     &   'Re-compile with pkg "mom_vecinv" in packages.conf'
+        CALL PRINT_ERROR( msgBuf , myThid )
+        CALL ALL_PROC_DIE( myThid )
+        STOP 'ABNORMAL END: S/R PACKAGES_CHECK'
+      ENDIF
 
+      IF ( tempStepping .OR. saltStepping ) THEN
+        WRITE(msgBuf,'(2A)')
+     &  'PACKAGES_CHECK: cannot step forward Temp or Salt',
+     &  ' without pkg/generic_advdiff'
+        CALL PRINT_ERROR( msgBuf , myThid )
+        WRITE(msgBuf,'(2A)') 'PACKAGES_CHECK: ',
+     &  'Re-compile with pkg "generic_advdiff" in packages.conf'
+        CALL PRINT_ERROR( msgBuf , myThid )
+        CALL ALL_PROC_DIE( myThid )
+        STOP 'ABNORMAL END: S/R PACKAGES_CHECK'
+      ENDIF
 
 
 C     If taveFreq is finite, make sure the pkg/timeave is being compiled
@@ -2048,8 +2070,7 @@ C---  Continue with standard packages (with standard usePKG flag)
       IF (useSBO) CALL PACKAGES_ERROR_MSG('SBO',' ',myThid)
 
 
-      IF (useDiagnostics)
-     &   CALL PACKAGES_ERROR_MSG( 'Diagnostics', ' ', myThid )
+      IF (useDiagnostics) CALL DIAGNOSTICS_CHECK( myThid )
 
       IF (useREGRID) CALL PACKAGES_ERROR_MSG('REGRID',' ',myThid)
 
@@ -2070,9 +2091,6 @@ C---  Continue with standard packages (with standard usePKG flag)
 
       IF (useMYPACKAGE) CALL PACKAGES_ERROR_MSG('MYPACKAGE',' ',myThid)
 
-C-    Check generic AdvDiff setting and related overlap minimum size:
-C     for this reason, called after other ${pkg}_check S/R
-      IF (useGAD) CALL GAD_CHECK( myThid )
 
 C---  Exclusive packages (which cannot be used together):
       IF ( useEXF .AND. useBulkForce ) THEN

@@ -3386,6 +3386,8 @@ c     COMMON / SFP_COMMON_R8 / cg2d_x, cg2d_b
 C     === Functions ====
       LOGICAL  DIFFERENT_MULTIPLE
       EXTERNAL DIFFERENT_MULTIPLE
+      LOGICAL  DIAGNOSTICS_IS_ON
+      EXTERNAL DIAGNOSTICS_IS_ON
 
 C     !INPUT/OUTPUT PARAMETERS:
 C     == Routine arguments ==
@@ -3408,6 +3410,8 @@ C     == Local variables ==
       INTEGER ioUnit
       CHARACTER*(MAX_LEN_MBUF) msgBuf
       Real*8     cg3d_b(1)
+      CHARACTER*8 diagName
+      Real*8 tmpVar (1-OLx:sNx+OLx,1-OLy:sNy+OLy)
 CEOP
 
         cg3d_b(1) = 0.
@@ -3525,10 +3529,6 @@ C-    end bi,bj loops
        ENDDO
       ENDDO
 
-      IF ( debugLevel .GE. debLevD ) THEN
-       CALL DEBUG_STATS_RL(1,cg2d_b,'cg2d_b (SOLVE_FOR_PRESSURE)',
-     &                        myThid)
-      ENDIF
       IF ( DIFFERENT_MULTIPLE(diagFreq, myTime, deltaTClock) ) THEN
        CALL WRITE_FLD_XY_RL( 'cg2d_b', 'I10', cg2d_b, myIter, myThid )
       ENDIF
@@ -3558,10 +3558,6 @@ C--   Call the single reduce CG solver
       CALL EXCH_XY_RL (  cg2d_x,  myThid  )
 c     CALL TIMER_STOP ('CG2D   [SOLVE_FOR_PRESSURE]',myThid)
 
-      IF ( debugLevel .GE. debLevD ) THEN
-       CALL DEBUG_STATS_RL(1,cg2d_x,'cg2d_x (SOLVE_FOR_PRESSURE)',
-     &                        myThid)
-      ENDIF
 
 C- dump CG2D output at monitorFreq (to reduce size of STD-OUTPUT files) :
       IF ( DIFFERENT_MULTIPLE(monitorFreq,myTime,deltaTClock)
@@ -3584,6 +3580,26 @@ C- dump CG2D output at monitorFreq (to reduce size of STD-OUTPUT files) :
        ENDIF
       ENDIF
 
+C--   Fill diagnostics
+      IF ( useDiagnostics .AND. implicSurfPress.NE.oneRL ) THEN
+        diagName = 'PHI_SURF'
+        IF ( DIAGNOSTICS_IS_ON(diagName,myThid) ) THEN
+         DO bj=myByLo(myThid),myByHi(myThid)
+          DO bi=myBxLo(myThid),myBxHi(myThid)
+           DO j=1-OLy,sNy+OLy
+            DO i=1-OLx,sNx+OLx
+             tmpVar(i,j) = implicSurfPress * cg2d_x(i,j,bi,bj)
+     &          + (oneRL - implicSurfPress)* Bo_surf(i,j,bi,bj)
+     &                                     * etaN(i,j,bi,bj)
+            ENDDO
+           ENDDO
+           CALL DIAGNOSTICS_FILL( tmpVar,diagName,1,1,2,bi,bj,myThid )
+          ENDDO
+         ENDDO
+        ENDIF
+      ELSEIF ( useDiagnostics ) THEN
+        CALL DIAGNOSTICS_FILL( cg2d_x,'PHI_SURF', 0,1, 0,1,1, myThid )
+      ENDIF
 
 C--   Transfert the 2D-solution to "etaN" :
       DO bj=myByLo(myThid),myByHi(myThid)

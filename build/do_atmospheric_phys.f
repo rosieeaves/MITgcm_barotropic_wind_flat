@@ -3143,7 +3143,6 @@ C     i,j,k    :: loop indices
       INTEGER i, j, k
       Real*8 thetaRef
 
-      IF (debugMode) CALL DEBUG_ENTER('DO_ATMOSPHERIC_PHYS',myThid)
 
       IF ( fluidIsAir ) THEN
        DO bj=myByLo(myThid),myByHi(myThid)
@@ -3176,7 +3175,6 @@ C-    horizontally uniform (tRef) reference state
 
 
 
-      IF (debugMode) CALL DEBUG_LEAVE('DO_ATMOSPHERIC_PHYS',myThid)
 
       RETURN
       END

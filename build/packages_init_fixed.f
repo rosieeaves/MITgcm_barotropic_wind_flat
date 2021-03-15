@@ -1949,19 +1949,19 @@ C     myThid :: my Thread Id Number
       INTEGER myThid
 CEOP
 
-      IF (debugMode) CALL DEBUG_ENTER('PACKAGES_INIT_FIXED',myThid)
 
 
 
+      IF ( useDiagnostics ) THEN
+C-    needs to call DIAGNOSTICS_INIT_EARLY before all package-diag-init calls
+        CALL DIAGNOSTICS_INIT_EARLY( myThid )
+        CALL DIAGNOSTICS_MAIN_INIT( myThid )
+      ENDIF
 
 
-C--   Initialize fixed params for GAD
-        IF (debugMode) CALL DEBUG_CALL('GAD_INIT_FIXED',myThid)
-      CALL GAD_INIT_FIXED( myThid )
 
 C--   Initialize fixed params for Momentum pkgs (common, fluxform, vecinv)
       IF ( momStepping ) THEN
-        IF (debugMode) CALL DEBUG_CALL('MOM_INIT_FIXED',myThid)
         CALL MOM_INIT_FIXED( myThid )
       ENDIF
 
@@ -2013,8 +2013,11 @@ C--   Old place where CTRL_INIT & CTRL_ADMTLM used to be called
 
 
 
+C-    needs to call DIAGNOSTICS_INIT_FIXED after all package-diag-init calls
+      IF ( useDiagnostics ) THEN
+        CALL DIAGNOSTICS_INIT_FIXED( myThid )
+      ENDIF
 
-      IF (debugMode) CALL DEBUG_LEAVE('PACKAGES_INIT_FIXED',myThid)
 
       RETURN
       END

@@ -1956,27 +1956,27 @@ C     Going to really do some IO. Make everyone except master thread wait.
 C     this is done within IO routines => no longer needed
 c     CALL BARRIER(myThid)
 
-C     Write restart file for 2nd-Order moment (active) Tracers
-      IF ( useGAD ) THEN
-        CALL GAD_WRITE_PICKUP(
-     I                 suffix, myTime, myIter, myThid )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C     Write pickup file for diagnostics package
+      IF (useDiagnostics) THEN
+        CALL DIAGNOSTICS_WRITE_PICKUP( permPickup,
+     I                         suffix, myTime, myIter, myThid )
       ENDIF
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

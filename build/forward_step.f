@@ -407,69 +407,6 @@ c# include "ECCO_CPPOPTIONS.h"
 c#endif
 
 
-CBOP
-C !ROUTINE: GAD_OPTIONS.h
-
-C !INTERFACE:
-C #include "GAD_OPTIONS.h"
-
-C !DESCRIPTION:
-C Contains CPP macros/flags for controlling optional features of package.
-CEOP
-
-C CPP options file for GAD (Generic Advection Diffusion) package
-C Use this file for selecting options within the GAD package
-
-
-C     Package-specific Options & Macros go here
-
-C This flag selects the form of COSINE(lat) scaling of bi-harmonic term.
-C *only for use on a lat-lon grid*
-C Setting this flag here only affects the bi-harmonic tracer terms; to
-C use COSINEMETH_III in the momentum equations set it CPP_OPTIONS.h
-
-C This selects isotropic scaling of harmonic and bi-harmonic term when
-C using the COSINE(lat) scaling.
-C Setting this flag here only affects the tracer diffusion terms; to
-C use ISOTROPIC_COS_SCALING of the horizontal viscosity terms in the
-C momentum equations set it CPP_OPTIONS.h; the following line
-C even overrides setting the flag in CPP_OPTIONS.h
-
-C As of checkpoint41, the inclusion of multi-dimensional advection
-C introduces excessive recomputation/storage for the adjoint.
-C We can disable it here using CPP because run-time flags are insufficient.
-
-C Use compressible flow method for multi-dim advection instead of old, less
-C accurate jmc method. Note: option has no effect on SOM advection which
-C always use compressible flow method.
-
-C This enable the use of 2nd-Order Moment advection scheme (Prather, 1986) for
-C Temperature and Salinity ; due to large memory space (10 times more / tracer)
-C requirement, by default, this part of the code is not compiled.
-
-C Hack to get rid of negatives caused by Redi.  Works by restricting the
-C outgoing flux (only contributions computed in gad_calc_rhs) for each cell
-C to be no more than the amount of tracer in the cell (see Smolarkiewicz
-C MWR 1989 and Bott MWR 1989).
-C The flux contributions computed in gad_calc_rhs which are affected by
-C this hack are:
-C - explicit diffusion, Redi and the non-local part of KPP
-C - advection is affected only if multiDimAdvection=.FALSE.
-C - vertical diffusion (including the diagonal contribution from GMRedi)
-C   only if implicitDiffusion=.FALSE.
-C - GM is affected only if GMREDI_AdvForm=.FALSE.
-C
-C The parameter SmolarkiewiczMaxFrac (defined in gad_init_fixed.F)
-C specifies the maximal fraction of tracer that can leave a cell.
-C By default it is 1.  This will prevent the tracer from going negative
-C due to contributions from gad_calc_rhs alone.  In the presence of other
-C contributions (or roundoff errors), it may be necessary to reduce this
-C value to achieve strict positivity.
-C
-C This hack applies to all tracers except temperature and salinity!
-C Do not use with Adams-Bashforth (for ptracers)!
-C Do not use with OBCS!
-
 
 
 CBOP
@@ -2177,7 +2114,6 @@ C     myIterBeg :: iteration number at beginning of time step
       LOGICAL modelEnd
 CEOP
 
-      IF (debugMode) CALL DEBUG_ENTER('FORWARD_STEP',myThid)
 
 
 
@@ -2189,11 +2125,17 @@ C     added to simplify adjoint derivation - no effect in forward run
 
 
 C--   Switch on/off diagnostics for snap-shot output:
+      IF ( useDiagnostics ) THEN
+        CALL DIAGNOSTICS_SWITCH_ONOFF( myTime, myIter, myThid )
+C--   State-variables diagnostics
+        CALL TIMER_START('DO_STATEVARS_DIAGS  [FORWARD_STEP]',myThid)
+        CALL DO_STATEVARS_DIAGS( myTime, 0, myIter, myThid )
+        CALL TIMER_STOP ('DO_STATEVARS_DIAGS  [FORWARD_STEP]',myThid)
+      ENDIF
 
 
 
 C--   Call driver to load external forcing fields from file
-      IF (debugMode) CALL DEBUG_CALL('LOAD_FIELDS_DRIVER',myThid)
       CALL TIMER_START('LOAD_FIELDS_DRIVER  [FORWARD_STEP]',myThid)
       CALL LOAD_FIELDS_DRIVER( myTime, myIter, myThid )
       CALL TIMER_STOP ('LOAD_FIELDS_DRIVER  [FORWARD_STEP]',myThid)
@@ -2208,13 +2150,11 @@ C--   Call external chepaml forcing package
 
 C--     Step forward fields and calculate time tendency terms.
 
-      IF (debugMode) CALL DEBUG_CALL('DO_ATMOSPHERIC_PHYS',myThid)
       CALL TIMER_START('DO_ATMOSPHERIC_PHYS [FORWARD_STEP]',myThid)
       CALL DO_ATMOSPHERIC_PHYS( myTime, myIter, myThid )
       CALL TIMER_STOP ('DO_ATMOSPHERIC_PHYS [FORWARD_STEP]',myThid)
 
 
-       IF (debugMode) CALL DEBUG_CALL('DO_OCEANIC_PHYS',myThid)
        CALL TIMER_START('DO_OCEANIC_PHYS     [FORWARD_STEP]',myThid)
        CALL DO_OCEANIC_PHYS( myTime, myIter, myThid )
        CALL TIMER_STOP ('DO_OCEANIC_PHYS     [FORWARD_STEP]',myThid)
@@ -2225,7 +2165,6 @@ C--     Step forward fields and calculate time tendency terms.
 
 
       IF ( .NOT.staggerTimeStep ) THEN
-        IF (debugMode) CALL DEBUG_CALL('THERMODYNAMICS',myThid)
         CALL TIMER_START('THERMODYNAMICS      [FORWARD_STEP]',myThid)
         CALL THERMODYNAMICS( myTime, myIter, myThid )
         CALL TIMER_STOP ('THERMODYNAMICS      [FORWARD_STEP]',myThid)
@@ -2244,7 +2183,6 @@ c #endif
 
 C--   Step forward fields and calculate time tendency terms.
       IF ( momStepping ) THEN
-        IF (debugMode) CALL DEBUG_CALL('DYNAMICS',myThid)
         CALL TIMER_START('DYNAMICS            [FORWARD_STEP]',myThid)
         CALL DYNAMICS( myTime, myIter, myThid )
         CALL TIMER_STOP ('DYNAMICS            [FORWARD_STEP]',myThid)
@@ -2290,14 +2228,17 @@ C       (+ update "etaN" & "etaH", exact volume conservation):
 C---+----1----+----2----+----3----+----4----+----5----+----6----+----7-|--+----|
       IF ( staggerTimeStep ) THEN
 C--   do exchanges of U,V (needed for multiDim) when using stagger time-step :
-        IF (debugMode)
-     &   CALL DEBUG_CALL('DO_STAGGER_FIELDS_EXCH.',myThid)
         CALL TIMER_START('BLOCKING_EXCHANGES  [FORWARD_STEP]',myThid)
         CALL DO_STAGGER_FIELDS_EXCHANGES( myTime, myIter, myThid )
         CALL TIMER_STOP ('BLOCKING_EXCHANGES  [FORWARD_STEP]',myThid)
 
+C--   State-variables diagnostics
+        IF ( useDiagnostics ) THEN
+          CALL TIMER_START('DO_STATEVARS_DIAGS  [FORWARD_STEP]',myThid)
+          CALL DO_STATEVARS_DIAGS( myTime, 1, myIter, myThid )
+          CALL TIMER_STOP ('DO_STATEVARS_DIAGS  [FORWARD_STEP]',myThid)
+        ENDIF
 
-        IF (debugMode) CALL DEBUG_CALL('THERMODYNAMICS',myThid)
         CALL TIMER_START('THERMODYNAMICS      [FORWARD_STEP]',myThid)
         CALL THERMODYNAMICS( myTime, myIter, myThid )
         CALL TIMER_STOP ('THERMODYNAMICS      [FORWARD_STEP]',myThid)
@@ -2323,6 +2264,11 @@ C--   Do "blocking" sends and receives for field "overlap" terms
       CALL DO_FIELDS_BLOCKING_EXCHANGES( myThid )
       CALL TIMER_STOP ('BLOCKING_EXCHANGES  [FORWARD_STEP]',myThid)
 
+      IF ( useDiagnostics ) THEN
+       CALL TIMER_START('DO_STATEVARS_DIAGS  [FORWARD_STEP]',myThid)
+       CALL DO_STATEVARS_DIAGS( myTime, 2, myIter, myThid )
+       CALL TIMER_STOP ('DO_STATEVARS_DIAGS  [FORWARD_STEP]',myThid)
+      ENDIF
 
 
 
@@ -2364,7 +2310,6 @@ C--   Save state for restarts
 
 
 
-      IF (debugMode) CALL DEBUG_LEAVE('FORWARD_STEP',myThid)
 
       RETURN
       END

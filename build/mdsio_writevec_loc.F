@@ -1,1 +1,0 @@
-/home/eavesr/MITgcm/pkg/mdsio/mdsio_writevec_loc.F

@@ -2077,7 +2077,6 @@ C     myThid :: thread number for this instance of the routine.
 C     !LOCAL VARIABLES:
 CEOP
 
-      IF (debugMode) CALL DEBUG_ENTER( 'LOAD_FIELDS_DRIVER', myThid )
 
 C--   Initialise forcing arrays that may receive multiple contributions
 
@@ -2090,7 +2089,6 @@ C--   Call external forcing package
 C--   Call external CheapAML forcing package
 
       IF ( fluidIsWater ) THEN
-        IF (debugMode) CALL DEBUG_CALL('EXTERNAL_FIELDS_LOAD',myThid)
         CALL TIMER_START('EXTERNAL_FLDS_LOAD [LOAD_FLDS_DRIVER]',myThid)
         CALL EXTERNAL_FIELDS_LOAD( myTime, myIter, myThid )
         CALL TIMER_STOP ('EXTERNAL_FLDS_LOAD [LOAD_FLDS_DRIVER]',myThid)
@@ -2099,7 +2097,6 @@ C--   Call external CheapAML forcing package
 
 
 
-      IF (debugMode) CALL DEBUG_LEAVE( 'LOAD_FIELDS_DRIVER', myThid )
 
       RETURN
       END

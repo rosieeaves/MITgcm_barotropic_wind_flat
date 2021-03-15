@@ -1888,10 +1888,7 @@ C     e.g. U.0000000100
       fType ='RS'
       bi = 0
       bj = 0
-      CALL MDS_READVEC_LOC(
-     &                       fullName, readBinaryPrec, ioUnit,
-     &                       fType, sizArr, dummyRL, array,
-     I                       bi, bj, iRec, myThid )
+      STOP 'ABNORMAL END: S/R READ_GLVEC_RS needs MDSIO pkg'
 
       RETURN
       END

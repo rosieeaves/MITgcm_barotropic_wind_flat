@@ -9483,6 +9483,12 @@ C     conversion from W/kg to K/s
      &          *recip_drF(k)*recip_hFacC(i,j,k,bi,bj)
           ENDDO
         ENDDO
+        IF ( useDiagnostics ) THEN
+C     conversion to W/m^2
+          tmpFac = rUnit2mass
+          CALL DIAGNOSTICS_SCALE_FILL( tmpVar, tmpFac, 1,
+     &                     'MoistCor', kc, 1, 2, bi,bj,myThid )
+        ENDIF
       ENDIF
 
 C     Ocean: Add temperature surface forcing (e.g., heat-flux) in surface level

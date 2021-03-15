@@ -3327,6 +3327,10 @@ C     and save gU,gV_[n] into guNm1,gvNm1 for the next time step.
      U                        gvNm1(1-OLx,1-OLy,1,bi,bj),
      O                        gv_AB,
      I                        mom_StartAB, myIter, myThid )
+      IF ( useDiagnostics ) THEN
+        CALL DIAGNOSTICS_FILL(gu_AB,'AB_gU   ',k,1,2,bi,bj,myThid)
+        CALL DIAGNOSTICS_FILL(gv_AB,'AB_gV   ',k,1,2,bi,bj,myThid)
+      ENDIF
 
 C-     Make a local copy in gU,Vtmp of gU,V^n+1/2 (+dissip. +forcing)
         DO j=jMin,jMax
@@ -3396,6 +3400,35 @@ C     Step forward meridional velocity (store in Gv)
         ENDDO
       ENDDO
 
+      IF ( useDiagnostics ) THEN
+        IF ( staggerTimeStep .OR. implicitIntGravWave ) THEN
+         DO j=jMin,jMax
+          DO i=iMin,iMax
+            gUdPx(i,j) = gUdPx(i,j)*maskW(i,j,k,bi,bj)
+            gVdPy(i,j) = gVdPy(i,j)*maskS(i,j,k,bi,bj)
+          ENDDO
+         ENDDO
+        ELSE
+         DO j=jMin,jMax
+          DO i=iMin,iMax
+            gUdPx(i,j) = ( gUdPx(i,j) - phFac*dPhiHydX(i,j) )
+     &                 *maskW(i,j,k,bi,bj)
+            gVdPy(i,j) = ( gVdPy(i,j) - phFac*dPhiHydY(i,j) )
+     &                 *maskS(i,j,k,bi,bj)
+          ENDDO
+         ENDDO
+        ENDIF
+        CALL DIAGNOSTICS_FILL( gUdPx,'Um_dPhiX',k,1,2,bi,bj,myThid )
+        CALL DIAGNOSTICS_FILL( gVdPy,'Vm_dPhiY',k,1,2,bi,bj,myThid )
+      ENDIF
+      IF ( momViscosity .AND. useDiagnostics ) THEN
+        CALL DIAGNOSTICS_FILL( guDissip,'Um_Diss ',k,1,2,bi,bj,myThid )
+        CALL DIAGNOSTICS_FILL( gvDissip,'Vm_Diss ',k,1,2,bi,bj,myThid )
+      ENDIF
+      IF ( momForcing .AND. useDiagnostics ) THEN
+        CALL DIAGNOSTICS_FILL( guExt,'Um_Ext  ',k,1,2,bi,bj,myThid )
+        CALL DIAGNOSTICS_FILL( gvExt,'Vm_Ext  ',k,1,2,bi,bj,myThid )
+      ENDIF
 
       RETURN
       END

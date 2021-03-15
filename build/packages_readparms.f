@@ -1996,6 +1996,9 @@ CEOP
 
 
 
+C--   if useDiagnostics=T, set diagnostics choices
+C      otherwise, just set pkgStatus=-1 and return
+      CALL DIAGNOSTICS_READPARMS( myThid )
 
 
 

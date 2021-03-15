@@ -3535,6 +3535,40 @@ c      ENDDO
 C---- variable/constant viscosity : end if/else block
 c     ENDIF
 
+      IF (useDiagnostics) THEN
+       CALL DIAGNOSTICS_FILL(viscAh_D,'VISCAHD ',k,1,2,bi,bj,myThid)
+       CALL DIAGNOSTICS_FILL(viscA4_D,'VISCA4D ',k,1,2,bi,bj,myThid)
+       CALL DIAGNOSTICS_FILL(viscAh_Z,'VISCAHZ ',k,1,2,bi,bj,myThid)
+       CALL DIAGNOSTICS_FILL(viscA4_Z,'VISCA4Z ',k,1,2,bi,bj,myThid)
+
+       CALL DIAGNOSTICS_FILL(viscAh_DMax,'VAHDMAX ',k,1,2,bi,bj,myThid)
+       CALL DIAGNOSTICS_FILL(viscA4_DMax,'VA4DMAX ',k,1,2,bi,bj,myThid)
+       CALL DIAGNOSTICS_FILL(viscAh_ZMax,'VAHZMAX ',k,1,2,bi,bj,myThid)
+       CALL DIAGNOSTICS_FILL(viscA4_ZMax,'VA4ZMAX ',k,1,2,bi,bj,myThid)
+
+       CALL DIAGNOSTICS_FILL(viscAh_DMin,'VAHDMIN ',k,1,2,bi,bj,myThid)
+       CALL DIAGNOSTICS_FILL(viscA4_DMin,'VA4DMIN ',k,1,2,bi,bj,myThid)
+       CALL DIAGNOSTICS_FILL(viscAh_ZMin,'VAHZMIN ',k,1,2,bi,bj,myThid)
+       CALL DIAGNOSTICS_FILL(viscA4_ZMin,'VA4ZMIN ',k,1,2,bi,bj,myThid)
+
+       CALL DIAGNOSTICS_FILL(viscAh_DLth,'VAHDLTH ',k,1,2,bi,bj,myThid)
+       CALL DIAGNOSTICS_FILL(viscA4_DLth,'VA4DLTH ',k,1,2,bi,bj,myThid)
+       CALL DIAGNOSTICS_FILL(viscAh_ZLth,'VAHZLTH ',k,1,2,bi,bj,myThid)
+       CALL DIAGNOSTICS_FILL(viscA4_ZLth,'VA4ZLTH ',k,1,2,bi,bj,myThid)
+
+       CALL DIAGNOSTICS_FILL(viscAh_DLthD,'VAHDLTHD',
+     &                       k,1,2,bi,bj,myThid)
+       CALL DIAGNOSTICS_FILL(viscA4_DLthD,'VA4DLTHD',
+     &                       k,1,2,bi,bj,myThid)
+       CALL DIAGNOSTICS_FILL(viscAh_ZLthD,'VAHZLTHD',
+     &                       k,1,2,bi,bj,myThid)
+       CALL DIAGNOSTICS_FILL(viscA4_ZLthD,'VA4ZLTHD',
+     &                       k,1,2,bi,bj,myThid)
+       CALL DIAGNOSTICS_FILL(viscAh_DSmg,'VAHDSMAG',k,1,2,bi,bj,myThid)
+       CALL DIAGNOSTICS_FILL(viscA4_DSmg,'VA4DSMAG',k,1,2,bi,bj,myThid)
+       CALL DIAGNOSTICS_FILL(viscAh_ZSmg,'VAHZSMAG',k,1,2,bi,bj,myThid)
+       CALL DIAGNOSTICS_FILL(viscA4_ZSmg,'VA4ZSMAG',k,1,2,bi,bj,myThid)
+      ENDIF
 
       RETURN
       END

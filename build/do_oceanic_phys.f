@@ -3238,12 +3238,23 @@ C     i,j,k         :: loop indices
       CHARACTER*(MAX_LEN_MBUF) msgBuf
       INTEGER doDiagsRho
       LOGICAL calcGMRedi, calcKPP, calcConvect
+      LOGICAL  DIAGNOSTICS_IS_ON
+      EXTERNAL DIAGNOSTICS_IS_ON
 CEOP
 
 
-      IF (debugMode) CALL DEBUG_ENTER('DO_OCEANIC_PHYS',myThid)
 
       doDiagsRho = 0
+      IF ( useDiagnostics .AND. fluidIsWater ) THEN
+        IF ( DIAGNOSTICS_IS_ON('MXLDEPTH',myThid) )
+     &       doDiagsRho = doDiagsRho + 1
+        IF ( DIAGNOSTICS_IS_ON('DRHODR  ',myThid) )
+     &       doDiagsRho = doDiagsRho + 2
+        IF ( DIAGNOSTICS_IS_ON('WdRHO_P ',myThid) )
+     &       doDiagsRho = doDiagsRho + 4
+        IF ( DIAGNOSTICS_IS_ON('WdRHOdP ',myThid) )
+     &       doDiagsRho = doDiagsRho + 8
+      ENDIF
 
       calcGMRedi  = useGMRedi
       calcKPP     = useKPP
@@ -3277,7 +3288,6 @@ C     relaxation terms, etc.
 C--   if fluid is not water, by-pass surfaceForcing, find_rho, gmredi
 C     and all vertical mixing schemes, but keep OBCS_CALC
       IF ( fluidIsWater ) THEN
-      IF (debugMode) CALL DEBUG_CALL('EXTERNAL_FORCING_SURF',myThid)
         CALL EXTERNAL_FORCING_SURF(
      I             iMin, iMax, jMin, jMax,
      I             myTime, myIter, myThid )
@@ -3307,7 +3317,6 @@ C This is currently used by GMRedi, IVDC, MXL-depth  and Diagnostics
 
 C--   Always compute density (stored in common block) here; even when it is not
 C     needed here, will be used anyway in calc_phi_hyd (data flow easier this way)
-        IF (debugMode) CALL DEBUG_CALL('FIND_RHO_2D (xNr)',myThid)
          IF ( .NOT. ( useDOWN_SLOPE .OR. useBBL ) ) THEN
            DO k=1,Nr
             CALL FIND_RHO_2D(
@@ -3319,11 +3328,6 @@ C     needed here, will be used anyway in calc_phi_hyd (data flow easier this wa
            ENDDO
          ENDIF
 
-        IF (debugMode) THEN
-          WRITE(msgBuf,'(A,2(I4,A))')
-     &         'ENTERING UPWARD K LOOP (bi=', bi, ', bj=', bj,')'
-          CALL DEBUG_MSG(msgBuf(1:43),myThid)
-        ENDIF
 
 C--     Start of diagnostic loop
         DO k=Nr,1,-1
@@ -3350,7 +3354,6 @@ C         slope terms (e.g. GM/Redi tensor or IVDC diffusivity)
      O                 rhoKm1,
      I                 k-1, bi, bj, myThid )
             ENDIF
-            IF (debugMode) CALL DEBUG_CALL('GRAD_SIGMA',myThid)
 cph Avoid variable aliasing for adjoint !!!
             DO j=jMin,jMax
              DO i=iMin,iMax
@@ -3368,13 +3371,18 @@ cph Avoid variable aliasing for adjoint !!!
 
 C--       Implicit Vertical Diffusion for Convection
           IF (k.GT.1 .AND. calcConvect) THEN
-            IF (debugMode) CALL DEBUG_CALL('CALC_IVDC',myThid)
             CALL CALC_IVDC(
      I        bi, bj, iMin, iMax, jMin, jMax, k,
      I        sigmaR,
      I        myTime, myIter, myThid)
           ENDIF
 
+          IF ( doDiagsRho.GE.4 ) THEN
+            CALL DIAGS_RHO_L( doDiagsRho, k, bi, bj,
+     I                        rhoInSitu(1-OLx,1-OLy,1,bi,bj),
+     I                        rhoKm1, wVel,
+     I                        myTime, myIter, myThid )
+          ENDIF
 
 C--     end of diagnostic k loop (Nr:1)
         ENDDO
@@ -3388,6 +3396,10 @@ C--     Diagnose Mixed Layer Depth:
         ENDIF
 
 
+        IF ( MOD(doDiagsRho,4).GE.2 ) THEN
+          CALL DIAGNOSTICS_FILL (sigmaR, 'DRHODR  ', 0, Nr,
+     &         2, bi, bj, myThid)
+        ENDIF
 
 C--    This is where EXTERNAL_FORCING_SURF(bi,bj) used to be called;
 C      now called earlier, before bi,bj loop.
@@ -3413,8 +3425,19 @@ C---  if fluid Is Water: end
 
 
 
+      IF ( fluidIsWater .AND. useDiagnostics ) THEN
+        CALL DIAGS_RHO_G(
+     I                    rhoInSitu, uVel, vVel, wVel,
+     I                    myTime, myIter, myThid )
+      ENDIF
+      IF ( useDiagnostics ) THEN
+        CALL DIAGS_OCEANIC_SURF_FLUX( myTime, myIter, myThid )
+      ENDIF
+      IF ( calcConvect .AND. useDiagnostics ) THEN
+        CALL DIAGNOSTICS_FILL( IVDConvCount, 'CONVADJ ',
+     &                               0, Nr, 0, 1, 1, myThid )
+      ENDIF
 
-      IF (debugMode) CALL DEBUG_LEAVE('DO_OCEANIC_PHYS',myThid)
 
       RETURN
       END

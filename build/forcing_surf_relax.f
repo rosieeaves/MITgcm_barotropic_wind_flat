@@ -3390,6 +3390,7 @@ C     ks     :: index of surface interface layer
       INTEGER i,j
       INTEGER ks
 CEOP
+      Real*8 tmpFac
 
       IF ( usingPCoords ) THEN
        ks        = Nr
@@ -3426,6 +3427,19 @@ C--   end bi,bj loops.
 C---+----1----+----2----+----3----+----4----+----5----+----6----+----7-|--+----|
 
 
+      IF ( useDiagnostics ) THEN
+
+C     tRelax (temperature relaxation [W/m2], positive <-> increasing Theta)
+        tmpFac = HeatCapacity_Cp*rUnit2mass
+        CALL DIAGNOSTICS_SCALE_FILL( surfaceForcingT, tmpFac, 1,
+     &                              'TRELAX  ', 0, 1, 0,1,1, myThid )
+
+C     sRelax (salt relaxation [g/m2/s], positive <-> increasing Salt)
+        tmpFac = rUnit2mass
+        CALL DIAGNOSTICS_SCALE_FILL( surfaceForcingS, tmpFac, 1,
+     &                              'SRELAX  ', 0, 1, 0,1,1, myThid )
+
+      ENDIF
 
       RETURN
       END

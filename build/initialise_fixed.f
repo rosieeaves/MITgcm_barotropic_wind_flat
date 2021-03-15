@@ -1903,7 +1903,6 @@ C     == Routine arguments ==
       INTEGER myThid
 CEOP
 
-      IF (debugMode) CALL DEBUG_ENTER('INITIALISE_FIXED',myThid)
 
 C-    here is a way to deliberately break the barrier syncronization
 C     by adding a BARRIER on thread XXX only ; Used to test BAR_CHECK.
@@ -1917,96 +1916,75 @@ C--   Check barrier synchronization:
 C--   Set model parameters.
 C     Parameters are set to defaults and then updates are read from
 C     an input file called data.
-      IF (debugMode) CALL DEBUG_CALL('INI_PARMS',myThid)
       CALL INI_PARMS( myThid )
 
 C--   Configure packages
-      IF (debugMode) CALL DEBUG_CALL('PACKAGES_BOOT',myThid)
       CALL PACKAGES_BOOT( myThid )
 
 
 C--   Read configuration parameters for packages
-      IF (debugMode) CALL DEBUG_CALL('PACKAGES_READPARMS',myThid)
       CALL PACKAGES_READPARMS( myThid )
 
 C--   Set (or reset) parameters (at this point, know which packages are used);
 C     after this call, main model parameters are not supposed to be modified.
-      IF (debugMode) CALL DEBUG_CALL('SET_PARMS',myThid)
       CALL SET_PARMS( myThid )
 
 C--   Write units/set precision/etc for I/O (pickup, MDS/RW, MNC, MONITOR):
-      IF (debugMode) CALL DEBUG_CALL('INI_MODEL_IO',myThid)
       CALL INI_MODEL_IO( myThid )
 
 C--   Set model grid.
 C     Variables defining model grid spacing are defined.
-      IF (debugMode) CALL DEBUG_CALL('INI_GRID',myThid)
       CALL INI_GRID( myThid )
 
 C--   Load reference profiles from files
-      IF (debugMode) CALL DEBUG_CALL('LOAD_REF_FILES',myThid)
       CALL LOAD_REF_FILES( myThid )
 
 C--   Set equation of state parameters.
-      IF (debugMode) CALL DEBUG_CALL('INI_EOS',myThid)
       CALL INI_EOS( myThid )
 
 C--   Set reference state (vertical reference profiles)
-      IF (debugMode) CALL DEBUG_CALL('SET_REF_STATE',myThid)
       CALL SET_REF_STATE( myThid )
 
 C--   Set remaining grid factors
-      IF (debugMode) CALL DEBUG_CALL('SET_GRID_FACTORS',myThid)
       CALL SET_GRID_FACTORS( myThid )
 
 C--   Initialise map of depths
-      IF (debugMode) CALL DEBUG_CALL('INI_DEPTHS',myThid)
       CALL INI_DEPTHS( myThid )
 
 C--   Derive masks, lopping factors and recipricols of quantities.
 C     Volumes and areas are set according to grid and depth map.
-      IF (debugMode) CALL DEBUG_CALL('INI_MASKS_ETC',myThid)
       CALL INI_MASKS_ETC( myThid )
 
 C--   Synchronize all threads after setting masks and before pkgs init.
       CALL BARRIER(myThid)
 
 C--   Call fixed data initialization phase of packages
-      IF (debugMode) CALL DEBUG_CALL('PACKAGES_INIT_FIXED',myThid)
       CALL PACKAGES_INIT_FIXED( myThid )
 
 C--   Set some domain-dependent (global) constant (e.g., globalArea)
-      IF (debugMode) CALL DEBUG_CALL('INI_GLOBAL_DOMAIN',myThid)
       CALL INI_GLOBAL_DOMAIN( myThid )
 
 C--   Set Bo_surf => define the Linear Relation: Phi_surf(eta)
-      IF (debugMode) CALL DEBUG_CALL('INI_LINEAR_PHISURF',myThid)
       CALL INI_LINEAR_PHISURF( myThid )
 
 C--   Set coriolis operators
-      IF (debugMode) CALL DEBUG_CALL('INI_CORI',myThid)
       CALL INI_CORI( myThid )
 
 C--   Set laplace operators for use in 2D conjugate gradient solver.
-      IF (debugMode) CALL DEBUG_CALL('INI_CG2D',myThid)
       CALL INI_CG2D( myThid )
 
 
 C--   Finally summarise the model configuration
-      IF (debugMode) CALL DEBUG_CALL('CONFIG_SUMMARY',myThid)
       CALL CONFIG_SUMMARY( myThid )
 
 C--   Check packages configuration (& print summary)
-      IF (debugMode) CALL DEBUG_CALL('PACKAGES_CHECK',myThid)
       CALL PACKAGES_CHECK( myThid )
 
 C--   Check parameters and model configuration
-      IF (debugMode) CALL DEBUG_CALL('CONFIG_CHECK',myThid)
       CALL CONFIG_CHECK( myThid )
 
 C--   Write grid data and geometry arrays
       IF ( debugLevel.GE.debLevA .OR. startTime.EQ.baseTime ) THEN
-        IF (debugMode) CALL DEBUG_CALL('WRITE_GRID',myThid)
         CALL WRITE_GRID( myThid )
       ENDIF
 
@@ -2014,7 +1992,6 @@ C--   Write grid data and geometry arrays
 C--   Check barrier synchronization:
       CALL BAR_CHECK( 3, myThid )
 
-      IF (debugMode) CALL DEBUG_LEAVE('INITIALISE_FIXED',myThid)
 
 C---+----1----+----2----+----3----+----4----+----5----+----6----+----7-|--+----|
 

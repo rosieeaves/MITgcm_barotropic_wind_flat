@@ -3126,6 +3126,8 @@ C     myThid    :: my Thread Id number
       INTEGER myThid
 
 C     === Functions ====
+      LOGICAL  DIAGNOSTICS_IS_ON
+      EXTERNAL DIAGNOSTICS_IS_ON
 
 C     !LOCAL VARIABLES:
 C     == Local variables ==
@@ -3141,6 +3143,9 @@ C     i,j :: Loop counters
 CEOP
 
       calcMixLayerDepth = .FALSE.
+      IF ( useDiagnostics.AND. .NOT.calcMixLayerDepth ) THEN
+        calcMixLayerDepth = DIAGNOSTICS_IS_ON('MXLDEPTH',myThid)
+      ENDIF
       IF ( calcMixLayerDepth ) THEN
 
 C--   Select which "method" to use:
@@ -3279,6 +3284,10 @@ C-    potential density (reference level = surface level)
         ENDDO
        ENDIF
 
+       IF ( useDiagnostics ) THEN
+        CALL DIAGNOSTICS_FILL( hMixLayer, 'MXLDEPTH',
+     &                         0, 1, 1, bi, bj, myThid )
+       ENDIF
 
 C--   end if calcMixLayerDepth
       ENDIF
