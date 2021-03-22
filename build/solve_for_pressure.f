@@ -3529,6 +3529,10 @@ C-    end bi,bj loops
        ENDDO
       ENDDO
 
+      IF ( debugLevel .GE. debLevD ) THEN
+       CALL DEBUG_STATS_RL(1,cg2d_b,'cg2d_b (SOLVE_FOR_PRESSURE)',
+     &                        myThid)
+      ENDIF
       IF ( DIFFERENT_MULTIPLE(diagFreq, myTime, deltaTClock) ) THEN
        CALL WRITE_FLD_XY_RL( 'cg2d_b', 'I10', cg2d_b, myIter, myThid )
       ENDIF
@@ -3558,6 +3562,10 @@ C--   Call the single reduce CG solver
       CALL EXCH_XY_RL (  cg2d_x,  myThid  )
 c     CALL TIMER_STOP ('CG2D   [SOLVE_FOR_PRESSURE]',myThid)
 
+      IF ( debugLevel .GE. debLevD ) THEN
+       CALL DEBUG_STATS_RL(1,cg2d_x,'cg2d_x (SOLVE_FOR_PRESSURE)',
+     &                        myThid)
+      ENDIF
 
 C- dump CG2D output at monitorFreq (to reduce size of STD-OUTPUT files) :
       IF ( DIFFERENT_MULTIPLE(monitorFreq,myTime,deltaTClock)

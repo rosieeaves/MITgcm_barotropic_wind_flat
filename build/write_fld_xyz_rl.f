@@ -1877,5 +1877,10 @@ C
       fType='RL'
       nNz=Nr
       iRec=1
+      CALL MDS_WRITE_FIELD(
+     I                      fullName, writeBinaryPrec,
+     I                      globalFile, useCurrentDir,
+     I                      fType, nNz, 1, nNz, field, dummyRS,
+     I                      iRec, myIter, myThid )
       RETURN
       END

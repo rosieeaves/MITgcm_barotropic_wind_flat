@@ -3243,6 +3243,7 @@ C     i,j,k         :: loop indices
 CEOP
 
 
+      IF (debugMode) CALL DEBUG_ENTER('DO_OCEANIC_PHYS',myThid)
 
       doDiagsRho = 0
       IF ( useDiagnostics .AND. fluidIsWater ) THEN
@@ -3288,6 +3289,7 @@ C     relaxation terms, etc.
 C--   if fluid is not water, by-pass surfaceForcing, find_rho, gmredi
 C     and all vertical mixing schemes, but keep OBCS_CALC
       IF ( fluidIsWater ) THEN
+      IF (debugMode) CALL DEBUG_CALL('EXTERNAL_FORCING_SURF',myThid)
         CALL EXTERNAL_FORCING_SURF(
      I             iMin, iMax, jMin, jMax,
      I             myTime, myIter, myThid )
@@ -3317,6 +3319,7 @@ C This is currently used by GMRedi, IVDC, MXL-depth  and Diagnostics
 
 C--   Always compute density (stored in common block) here; even when it is not
 C     needed here, will be used anyway in calc_phi_hyd (data flow easier this way)
+        IF (debugMode) CALL DEBUG_CALL('FIND_RHO_2D (xNr)',myThid)
          IF ( .NOT. ( useDOWN_SLOPE .OR. useBBL ) ) THEN
            DO k=1,Nr
             CALL FIND_RHO_2D(
@@ -3328,6 +3331,11 @@ C     needed here, will be used anyway in calc_phi_hyd (data flow easier this wa
            ENDDO
          ENDIF
 
+        IF (debugMode) THEN
+          WRITE(msgBuf,'(A,2(I4,A))')
+     &         'ENTERING UPWARD K LOOP (bi=', bi, ', bj=', bj,')'
+          CALL DEBUG_MSG(msgBuf(1:43),myThid)
+        ENDIF
 
 C--     Start of diagnostic loop
         DO k=Nr,1,-1
@@ -3354,6 +3362,7 @@ C         slope terms (e.g. GM/Redi tensor or IVDC diffusivity)
      O                 rhoKm1,
      I                 k-1, bi, bj, myThid )
             ENDIF
+            IF (debugMode) CALL DEBUG_CALL('GRAD_SIGMA',myThid)
 cph Avoid variable aliasing for adjoint !!!
             DO j=jMin,jMax
              DO i=iMin,iMax
@@ -3371,6 +3380,7 @@ cph Avoid variable aliasing for adjoint !!!
 
 C--       Implicit Vertical Diffusion for Convection
           IF (k.GT.1 .AND. calcConvect) THEN
+            IF (debugMode) CALL DEBUG_CALL('CALC_IVDC',myThid)
             CALL CALC_IVDC(
      I        bi, bj, iMin, iMax, jMin, jMax, k,
      I        sigmaR,
@@ -3438,6 +3448,7 @@ C---  if fluid Is Water: end
      &                               0, Nr, 0, 1, 1, myThid )
       ENDIF
 
+      IF (debugMode) CALL DEBUG_LEAVE('DO_OCEANIC_PHYS',myThid)
 
       RETURN
       END

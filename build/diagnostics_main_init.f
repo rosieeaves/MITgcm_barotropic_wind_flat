@@ -2588,6 +2588,50 @@ c     diagTitle = 'Free-Surface r-Position (Pressure, Height) (Pa,m)'
      I          diagName, diagCode, diagUnits, diagTitle, 0, myThid )
 
 
+      diagName  = 'gT_Forc '
+      diagTitle = 'Potential Temp. forcing tendency'
+      diagUnits = DIAGS_MK_UNITS( tUnit4c//'/s', myThid )
+      diagCode  = 'SMR     MR      '
+      CALL DIAGNOSTICS_ADDTOLIST( diagNum,
+     I          diagName, diagCode, diagUnits, diagTitle, 0, myThid )
+
+      diagName  = 'gS_Forc '
+      diagTitle = DIAGS_MK_TITLE(
+     &            sTitle//'forcing tendency', myThid )
+      diagUnits = DIAGS_MK_UNITS( sUnit5c//'/s', myThid )
+      diagCode  = 'SMR     MR      '
+      CALL DIAGNOSTICS_ADDTOLIST( diagNum,
+     I          diagName, diagCode, diagUnits, diagTitle, 0, myThid )
+
+      diagName  = 'AB_gT   '
+      diagTitle = 'Potential Temp. tendency from Adams-Bashforth'
+      diagUnits = DIAGS_MK_UNITS( tUnit4c//'/s', myThid )
+      diagCode  = 'SMR     MR      '
+      CALL DIAGNOSTICS_ADDTOLIST( diagNum,
+     I          diagName, diagCode, diagUnits, diagTitle, 0, myThid )
+
+      diagName  = 'AB_gS   '
+      diagTitle = DIAGS_MK_TITLE(
+     &            sTitle//'tendency from Adams-Bashforth', myThid )
+      diagUnits = DIAGS_MK_UNITS( sUnit5c//'/s', myThid )
+      diagCode  = 'SMR     MR      '
+      CALL DIAGNOSTICS_ADDTOLIST( diagNum,
+     I          diagName, diagCode, diagUnits, diagTitle, 0, myThid )
+
+      diagName  = 'gTinAB  '
+      diagTitle = 'Potential Temp. tendency going in Adams-Bashforth'
+      diagUnits = DIAGS_MK_UNITS( tUnit4c//'/s', myThid )
+      diagCode  = 'SMR     MR      '
+      CALL DIAGNOSTICS_ADDTOLIST( diagNum,
+     I          diagName, diagCode, diagUnits, diagTitle, 0, myThid )
+
+      diagName  = 'gSinAB  '
+      diagTitle = DIAGS_MK_TITLE(
+     &            sTitle//'tendency going in Adams-Bashforth', myThid )
+      diagUnits = DIAGS_MK_UNITS( sUnit5c//'/s', myThid )
+      diagCode  = 'SMR     MR      '
+      CALL DIAGNOSTICS_ADDTOLIST( diagNum,
+     I          diagName, diagCode, diagUnits, diagTitle, 0, myThid )
 
       diagName  = 'AB_gU   '
       diagTitle = 'U momentum tendency from Adams-Bashforth'

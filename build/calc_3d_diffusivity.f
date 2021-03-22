@@ -3115,6 +3115,174 @@ C            where the fluid column is empty (continent)
       INTEGER kLowC (1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
 
 C---+----1----+----2----+----3----+----4----+----5----+----6----+----7-|--+----|
+CBOP
+C !ROUTINE: GAD.h
+
+C !INTERFACE:
+C #include "GAD.h"
+
+C !DESCRIPTION:
+C Contains enumerated constants for distinguishing between different
+C advection schemes and tracers.
+C
+C Unfortunately, there is no easy way to make use of the
+C tokens in namelist input so for now we have to enter the
+C tokens value into "data" (ie. 2 for 2nd order etc.)
+
+C !USES:
+
+C !DEFINED PARAMETERS:
+
+C ENUM_UPWIND_1RST :: 1rst Order Upwind
+      INTEGER ENUM_UPWIND_1RST
+      PARAMETER(ENUM_UPWIND_1RST=1)
+
+C ENUM_CENTERED_2ND :: Centered 2nd order
+      INTEGER ENUM_CENTERED_2ND
+      PARAMETER(ENUM_CENTERED_2ND=2)
+
+C ENUM_UPWIND_3RD :: 3rd order upwind
+      INTEGER ENUM_UPWIND_3RD
+      PARAMETER(ENUM_UPWIND_3RD=3)
+
+C ENUM_CENTERED_4TH :: Centered 4th order
+      INTEGER ENUM_CENTERED_4TH
+      PARAMETER(ENUM_CENTERED_4TH=4)
+
+C ENUM_DST2 :: 2nd Order Direct Space and Time (= Lax-Wendroff)
+      INTEGER ENUM_DST2
+      PARAMETER(ENUM_DST2=20)
+
+C ENUM_FLUX_LIMIT :: Non-linear flux limiter
+      INTEGER ENUM_FLUX_LIMIT
+      PARAMETER(ENUM_FLUX_LIMIT=77)
+
+C ENUM_DST3 :: 3rd Order Direst Space and Time
+      INTEGER ENUM_DST3
+      PARAMETER(ENUM_DST3=30)
+
+C ENUM_DST3_FLUX_LIMIT :: 3-DST flux limited
+      INTEGER ENUM_DST3_FLUX_LIMIT
+      PARAMETER(ENUM_DST3_FLUX_LIMIT=33)
+
+C ENUM_OS7MP :: 7th Order One Step method with Monotonicity Preserving Limiter
+      INTEGER ENUM_OS7MP
+      PARAMETER(ENUM_OS7MP=7)
+
+C ENUM_SOM_PRATHER :: 2nd Order-Moment Advection Scheme, Prather, 1986
+      INTEGER ENUM_SOM_PRATHER
+      PARAMETER(ENUM_SOM_PRATHER=80)
+
+C ENUM_SOM_LIMITER :: 2nd Order-Moment Advection Scheme, Prather Limiter
+      INTEGER ENUM_SOM_LIMITER
+      PARAMETER(ENUM_SOM_LIMITER=81)
+
+C ENUM_PPM_NULL :: piecewise parabolic method with "null" limiter
+      INTEGER ENUM_PPM_NULL_LIMIT
+      PARAMETER(ENUM_PPM_NULL_LIMIT=40)
+
+C ENUM_PPM_MONO :: piecewise parabolic method with "mono" limiter
+      INTEGER ENUM_PPM_MONO_LIMIT
+      PARAMETER(ENUM_PPM_MONO_LIMIT=41)
+
+C ENUM_PPM_WENO :: piecewise parabolic method with "weno" limiter
+      INTEGER ENUM_PPM_WENO_LIMIT
+      PARAMETER(ENUM_PPM_WENO_LIMIT=42)
+
+C ENUM_PQM_NULL :: piecewise quartic method with "null" limiter
+      INTEGER ENUM_PQM_NULL_LIMIT
+      PARAMETER(ENUM_PQM_NULL_LIMIT=50)
+
+C ENUM_PQM_MONO :: piecewise quartic method with "mono" limiter
+      INTEGER ENUM_PQM_MONO_LIMIT
+      PARAMETER(ENUM_PQM_MONO_LIMIT=51)
+
+C ENUM_PQM_WENO :: piecewise quartic method with "weno" limiter
+      INTEGER ENUM_PQM_WENO_LIMIT
+      PARAMETER(ENUM_PQM_WENO_LIMIT=52)
+
+C GAD_Scheme_MaxNum :: maximum possible number for an advection scheme
+      INTEGER GAD_Scheme_MaxNum
+      PARAMETER( GAD_Scheme_MaxNum = 100 )
+
+C nSOM :: number of 1rst & 2nd Order-Moments: 1+1 (1D), 2+3 (2D), 3+6 (3D)
+      INTEGER nSOM
+      PARAMETER( nSOM = 3+6 )
+
+C oneSixth :: Third/fourth order interpolation factor
+      Real*8 oneSixth
+      PARAMETER(oneSixth=1.d0/6.d0)
+
+C loop range for computing vertical advection tendency
+C  iMinAdvR,iMaxAdvR  :: 1rst index (X-dir) loop range for vertical advection
+C  jMinAdvR,jMaxAdvR  :: 2nd  index (Y-dir) loop range for vertical advection
+      INTEGER iMinAdvR, iMaxAdvR, jMinAdvR, jMaxAdvR
+c     PARAMETER ( iMinAdvR = 1-OLx , iMaxAdvR = sNx+OLx )
+c     PARAMETER ( jMinAdvR = 1-OLy , jMaxAdvR = sNy+OLy )
+C- note: we use to compute vertical advection tracer tendency everywhere
+C        (overlap included) as above, but really needs valid tracer tendency
+C        in interior only (as below):
+      PARAMETER ( iMinAdvR = 1 , iMaxAdvR = sNx )
+      PARAMETER ( jMinAdvR = 1 , jMaxAdvR = sNy )
+
+C Differentiate between tracers (needed for KPP - arrgh!!!)
+cph                              and GMRedi arrgh*arrgh!!!)
+cph  indices are used for TAF key computations, so need to
+cph  running from 1, 2, ...
+c
+C GAD_TEMPERATURE :: temperature
+      INTEGER GAD_TEMPERATURE
+      PARAMETER(GAD_TEMPERATURE=1)
+C GAD_SALINITY :: salinity
+      INTEGER GAD_SALINITY
+      PARAMETER(GAD_SALINITY=2)
+C GAD_TR1 :: passive tracer 1
+      INTEGER GAD_TR1
+      PARAMETER(GAD_TR1=3)
+CEOP
+
+C--   COMMON /GAD_PARM_C/ Character parameters for GAD pkg routines
+C      somSfx       :: 1rst & 2nd Order moment suffix
+      CHARACTER*2 somSfx(nSOM)
+      COMMON /GAD_PARM_C/
+     & somSfx
+
+C--   COMMON /GAD_PARM_I/ Integer parameters for GAD pkg routines
+C GAD_OlMinSize     :: overlap minimum size for GAD routines
+C           1: min required; 2: to add to current min; 3: factor to apply
+      INTEGER GAD_OlMinSize(3)
+      COMMON /GAD_PARM_I/
+     &        GAD_OlMinSize
+
+C--   COMMON /GAD_PARM_L/ Logical parameters for GAD pkg routines
+C tempSOM_Advection :: set to T if using 2nd-Order Moment advection for Temp
+C saltSOM_Advection :: set to T if using 2nd-Order Moment advection for Salt
+C tempMultiDimAdvec :: set to T if using multi-dim advection for Temp
+C saltMultiDimAdvec :: set to T if using multi-dim advection for Salt
+C AdamsBashforthGt  :: apply Adams-Bashforth extrapolation on T tendency (=Gt)
+C AdamsBashforthGs  :: apply Adams-Bashforth extrapolation on S tendency (=Gs)
+C AdamsBashforth_T  :: apply Adams-Bashforth extrapolation on Pot.Temp.
+C AdamsBashforth_S  :: apply Adams-Bashforth extrapolation on Salinity
+      LOGICAL tempSOM_Advection
+      LOGICAL saltSOM_Advection
+      LOGICAL tempMultiDimAdvec
+      LOGICAL saltMultiDimAdvec
+      LOGICAL AdamsBashforthGt
+      LOGICAL AdamsBashforthGs
+      LOGICAL AdamsBashforth_T
+      LOGICAL AdamsBashforth_S
+      COMMON /GAD_PARM_L/
+     & tempSOM_Advection, saltSOM_Advection,
+     & tempMultiDimAdvec, saltMultiDimAdvec,
+     & AdamsBashforthGt, AdamsBashforthGs,
+     & AdamsBashforth_T, AdamsBashforth_S
+
+      Real*8 SmolarkiewiczMaxFrac
+      COMMON /GAD_SMOL/ SmolarkiewiczMaxFrac
+
+CEH3 ;;; Local Variables: ***
+CEH3 ;;; mode:fortran ***
+CEH3 ;;; End: ***
 
 C     !INPUT/OUTPUT PARAMETERS:
 C     == Routine arguments ==
@@ -3131,6 +3299,195 @@ C     KappaRTr   :: Net diffusivity for this tracer (trIdentity)
       LOGICAL trUseGMRedi, trUseKPP
       Real*8 KappaRTr(1-OLx:sNx+OLx,1-OLy:sNy+OLy,Nr)
       INTEGER myThid
+
+C     !LOCAL VARIABLES:
+C     == Local variables ==
+C     i, j, k    :: Loop counters
+C     iTr        :: passive tracer index
+C     msgBuf     :: message buffer
+      INTEGER i,j,k
+      Real*8 KbryanLewis79
+      CHARACTER*(MAX_LEN_MBUF) msgBuf
+      INTEGER km, mixSurf, mixBott
+      Real*8 pC_kFac
+      Real*8 tmpFac(1-OLx:sNx+OLx,1-OLy:sNy+OLy)
+CEOP
+
+      IF ( .NOT. trUseKPP ) THEN
+       DO k = 1,Nr
+        KbryanLewis79=diffKrBL79surf+(diffKrBL79deep-diffKrBL79surf)
+     &       *(atan(-(rF(k)-diffKrBL79Ho)/diffKrBL79scl)/PI+0.5D0)
+        DO j = 1-OLy,sNy+OLy
+         DO i = 1-OLx,sNx+OLx
+          IF ( .TRUE. ) THEN
+           KappaRTr(i,j,k) =
+     &         IVDConvCount(i,j,k,bi,bj)*ivdc_kappa
+     &         + KbryanLewis79
+          ENDIF
+         ENDDO
+        ENDDO
+       ENDDO
+       IF ( trIdentity.EQ.GAD_TEMPERATURE ) THEN
+        DO k = 1,Nr
+         DO j = 1-OLy,sNy+OLy
+          DO i = 1-OLx,sNx+OLx
+           KappaRTr(i,j,k) = KappaRTr(i,j,k)
+     &          + diffKrNrT(k)
+          ENDDO
+         ENDDO
+        ENDDO
+       ELSEIF ( trIdentity.EQ.GAD_SALINITY) THEN
+        DO k = 1,Nr
+         DO j = 1-OLy, sNy+OLy
+          DO i = 1-OLx, sNx+OLx
+           KappaRTr(i,j,k) = KappaRTr(i,j,k)
+     &          + diffKrNrS(k)
+          ENDDO
+         ENDDO
+        ENDDO
+       ELSE
+        WRITE(msgBuf,'(A,I4)')
+     &       ' CALC_3D_DIFFUSIVITY: Invalid tracer Id: ',trIdentity
+        CALL PRINT_ERROR(msgBuf, myThid)
+        STOP 'ABNORMAL END: S/R CALC_3D_DIFFUSIVITY'
+       ENDIF
+      ENDIF
+
+C--   Add physical pacakge contributions:
+
+
+
+
+
+
+
+      IF ( interDiffKr_pCell ) THEN
+C--   This is a hack: alter vertical diffusivity (instead of changing many S/R)
+C     in order to account for missing hFac in diffusion term
+       DO k = 2,Nr
+         km = k - 1
+C-    account for true distance (including hFac) in vertical gradient
+         DO j = 2-OLy, sNy+OLy
+          DO i = 2-OLx, sNx+OLx
+           IF ( k.GT.kSurfC(i,j,bi,bj) .AND.
+     &          k.LE.kLowC(i,j,bi,bj) ) THEN
+             KappaRTr(i,j,k) = KappaRTr(i,j,k)
+     &                *twoRL/(hFacC(i,j,km,bi,bj)+hFacC(i,j,k,bi,bj))
+           ENDIF
+          ENDDO
+         ENDDO
+       ENDDO
+      ENDIF
+
+      IF ( pCellMix_select.GT.0 ) THEN
+C--   This is a hack: alter vertical diffusivity (instead of changing many S/R)
+C     in order to to increase mixing for too thin surface/bottom partial cell
+       mixSurf = pCellMix_select/10
+       mixBott = MOD(pCellMix_select,10)
+       DO k = 2,Nr
+         km = k - 1
+         pC_kFac = 1.
+         IF ( pCellMix_delR.LT.drF(k) )
+     &     pC_kFac = pCellMix_delR*recip_drF(k)
+
+C-    Increase KappaRTr above bottom level:
+         IF ( mixBott.GE.1 ) THEN
+          DO j = 2-OLy, sNy+OLy
+           DO i = 2-OLx, sNx+OLx
+             tmpFac(i,j) = 0.D0
+             IF ( k.EQ.kLowC(i,j,bi,bj) .AND.
+     &            k.GT.kSurfC(i,j,bi,bj) ) THEN
+               tmpFac(i,j) = pC_kFac*recip_hFacC(i,j,k,bi,bj)
+             ENDIF
+           ENDDO
+          ENDDO
+          IF ( mixBott.EQ.2 ) THEN
+           DO j = 2-OLy, sNy+OLy
+            DO i = 2-OLx, sNx+OLx
+             tmpFac(i,j) = tmpFac(i,j)*tmpFac(i,j)
+            ENDDO
+           ENDDO
+          ELSEIF ( mixBott.EQ.3 ) THEN
+           DO j = 2-OLy, sNy+OLy
+            DO i = 2-OLx, sNx+OLx
+             tmpFac(i,j) = tmpFac(i,j)*tmpFac(i,j)*tmpFac(i,j)
+            ENDDO
+           ENDDO
+          ELSEIF ( mixBott.EQ.4 ) THEN
+           DO j = 2-OLy, sNy+OLy
+            DO i = 2-OLx, sNx+OLx
+             tmpFac(i,j) = tmpFac(i,j)*tmpFac(i,j)
+     &                   * tmpFac(i,j)*tmpFac(i,j)
+            ENDDO
+           ENDDO
+          ENDIF
+C-    increase mixing above bottom (by ~(1/hFac)^mixBott) if too thin p-cell
+          DO j = 2-OLy, sNy+OLy
+           DO i = 2-OLx, sNx+OLx
+             tmpFac(i,j) = MIN( tmpFac(i,j), pCellMix_maxFac )
+             KappaRTr(i,j,k) = MAX( KappaRTr(i,j,k),
+     &                              pCellMix_diffKr(k)*tmpFac(i,j) )
+           ENDDO
+          ENDDO
+         ENDIF
+
+         pC_kFac = 1.
+         IF ( pCellMix_delR.LT.drF(km) )
+     &     pC_kFac = pCellMix_delR*recip_drF(km)
+
+C-    Increase KappaRTr below surface level:
+         IF ( mixSurf.GE.1 ) THEN
+          DO j = 2-OLy, sNy+OLy
+           DO i = 2-OLx, sNx+OLx
+             tmpFac(i,j) = 0.D0
+             IF ( km.EQ.kSurfC(i,j,bi,bj) .AND.
+     &            km.LT.kLowC(i,j,bi,bj) ) THEN
+               tmpFac(i,j) = pC_kFac*recip_hFacC(i,j,km,bi,bj)
+             ENDIF
+           ENDDO
+          ENDDO
+          IF ( mixSurf.EQ.2 ) THEN
+           DO j = 2-OLy, sNy+OLy
+            DO i = 2-OLx, sNx+OLx
+             tmpFac(i,j) = tmpFac(i,j)*tmpFac(i,j)
+            ENDDO
+           ENDDO
+          ELSEIF ( mixSurf.EQ.3 ) THEN
+           DO j = 2-OLy, sNy+OLy
+            DO i = 2-OLx, sNx+OLx
+             tmpFac(i,j) = tmpFac(i,j)*tmpFac(i,j)*tmpFac(i,j)
+            ENDDO
+           ENDDO
+          ELSEIF ( mixSurf.EQ.4 ) THEN
+           DO j = 2-OLy, sNy+OLy
+            DO i = 2-OLx, sNx+OLx
+             tmpFac(i,j) = tmpFac(i,j)*tmpFac(i,j)
+     &                   * tmpFac(i,j)*tmpFac(i,j)
+            ENDDO
+           ENDDO
+          ENDIF
+C-    increase mixing below surface (by ~(1/hFac)^mixSurf) if too thin p-cell
+          DO j = 2-OLy, sNy+OLy
+           DO i = 2-OLx, sNx+OLx
+             tmpFac(i,j) = MIN( tmpFac(i,j), pCellMix_maxFac )
+             KappaRTr(i,j,k) = MAX( KappaRTr(i,j,k),
+     &                              pCellMix_diffKr(k)*tmpFac(i,j) )
+           ENDDO
+          ENDDO
+         ENDIF
+
+C--   end of k loop
+       ENDDO
+      ENDIF
+
+C-    Apply mask to vertical diffusivity
+C jmc: do not have the impression that masking is needed
+C      but could be removed later if it is the case.
+c     DO j = 1-OLy, sNy+OLy
+c      DO i = 1-OLx, sNx+OLx
+c       KappaRTr(i,j,k) = maskUp(i,j)*KappaRTr(i,j,k)
+c      ENDDO
+c     ENDDO
 
 
       RETURN

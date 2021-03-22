@@ -1,4 +1,4 @@
- Total Nb of available Diagnostics: ndiagt=   160
+ Total Nb of available Diagnostics: ndiagt=   189
 ------------------------------------------------------------------------------------
   Num  |<-Name->|Levs|  mate |<- code ->|<--  Units   -->|<- Tile (max=80c)         
 ------------------------------------------------------------------------------------
@@ -105,66 +105,95 @@
   Num  |<-Name->|Levs|  mate |<- code ->|<--  Units   -->|<- Tile (max=80c)         
 ------------------------------------------------------------------------------------
    100 |MoistCor|  1 |       |SM      MR|W/m^2           |Heating correction due to moist thermodynamics
-   101 |AB_gU   |  1 |   102 |UUR     MR|m/s^2           |U momentum tendency from Adams-Bashforth
-   102 |AB_gV   |  1 |   101 |VVR     MR|m/s^2           |V momentum tendency from Adams-Bashforth
-   103 |VISCAHZ |  1 |       |SZ      MR|m^2/s           |Harmonic Visc Coefficient (m2/s) (Zeta Pt)
-   104 |VISCA4Z |  1 |       |SZ      MR|m^4/s           |Biharmonic Visc Coefficient (m4/s) (Zeta Pt)
-   105 |VISCAHD |  1 |       |SM      MR|m^2/s           |Harmonic Viscosity Coefficient (m2/s) (Div Pt)
-   106 |VISCA4D |  1 |       |SM      MR|m^4/s           |Biharmonic Viscosity Coefficient (m4/s) (Div Pt)
-   107 |VISCAHW |  1 |       |WM      LR|m^2/s           |Harmonic Viscosity Coefficient (m2/s) (W Pt)
-   108 |VISCA4W |  1 |       |WM      LR|m^4/s           |Biharmonic Viscosity Coefficient (m4/s) (W Pt)
-   109 |VAHZMAX |  1 |       |SZ      MR|m^2/s           |CFL-MAX Harm Visc Coefficient (m2/s) (Zeta Pt)
-   110 |VA4ZMAX |  1 |       |SZ      MR|m^4/s           |CFL-MAX Biharm Visc Coefficient (m4/s) (Zeta Pt)
-   111 |VAHDMAX |  1 |       |SM      MR|m^2/s           |CFL-MAX Harm Visc Coefficient (m2/s) (Div Pt)
-   112 |VA4DMAX |  1 |       |SM      MR|m^4/s           |CFL-MAX Biharm Visc Coefficient (m4/s) (Div Pt)
-   113 |VAHZMIN |  1 |       |SZ      MR|m^2/s           |RE-MIN Harm Visc Coefficient (m2/s) (Zeta Pt)
-   114 |VA4ZMIN |  1 |       |SZ      MR|m^4/s           |RE-MIN Biharm Visc Coefficient (m4/s) (Zeta Pt)
-   115 |VAHDMIN |  1 |       |SM      MR|m^2/s           |RE-MIN Harm Visc Coefficient (m2/s) (Div Pt)
-   116 |VA4DMIN |  1 |       |SM      MR|m^4/s           |RE-MIN Biharm Visc Coefficient (m4/s) (Div Pt)
-   117 |VAHZLTH |  1 |       |SZ      MR|m^2/s           |Leith Harm Visc Coefficient (m2/s) (Zeta Pt)
-   118 |VA4ZLTH |  1 |       |SZ      MR|m^4/s           |Leith Biharm Visc Coefficient (m4/s) (Zeta Pt)
-   119 |VAHDLTH |  1 |       |SM      MR|m^2/s           |Leith Harm Visc Coefficient (m2/s) (Div Pt)
-   120 |VA4DLTH |  1 |       |SM      MR|m^4/s           |Leith Biharm Visc Coefficient (m4/s) (Div Pt)
-   121 |VAHZLTHD|  1 |       |SZ      MR|m^2/s           |LeithD Harm Visc Coefficient (m2/s) (Zeta Pt)
-   122 |VA4ZLTHD|  1 |       |SZ      MR|m^4/s           |LeithD Biharm Visc Coefficient (m4/s) (Zeta Pt)
-   123 |VAHDLTHD|  1 |       |SM      MR|m^2/s           |LeithD Harm Visc Coefficient (m2/s) (Div Pt)
-   124 |VA4DLTHD|  1 |       |SM      MR|m^4/s           |LeithD Biharm Visc Coefficient (m4/s) (Div Pt)
-   125 |VAHZSMAG|  1 |       |SZ      MR|m^2/s           |Smagorinsky Harm Visc Coefficient (m2/s) (Zeta Pt)
-   126 |VA4ZSMAG|  1 |       |SZ      MR|m^4/s           |Smagorinsky Biharm Visc Coeff. (m4/s) (Zeta Pt)
-   127 |VAHDSMAG|  1 |       |SM      MR|m^2/s           |Smagorinsky Harm Visc Coefficient (m2/s) (Div Pt)
-   128 |VA4DSMAG|  1 |       |SM      MR|m^4/s           |Smagorinsky Biharm Visc Coeff. (m4/s) (Div Pt)
-   129 |momKE   |  1 |       |SMR     MR|m^2/s^2         |Kinetic Energy (in momentum Eq.)
-   130 |Stretch |  1 |       |SM      MR|s^-1            |Vortex stretching from QG Leith dynamic viscosity
-   131 |USidDrag|  1 |   132 |UUR     MR|m/s^2           |U momentum tendency from Side Drag
-   132 |VSidDrag|  1 |   131 |VVR     MR|m/s^2           |V momentum tendency from Side Drag
-   133 |Um_Diss |  1 |   134 |UUR     MR|m/s^2           |U momentum tendency from Dissipation (Explicit part)
-   134 |Vm_Diss |  1 |   133 |VVR     MR|m/s^2           |V momentum tendency from Dissipation (Explicit part)
-   135 |Um_ImplD|  1 |   136 |UUR     MR|m/s^2           |U momentum tendency from Dissipation (Implicit part)
-   136 |Vm_ImplD|  1 |   135 |VVR     MR|m/s^2           |V momentum tendency from Dissipation (Implicit part)
-   137 |Um_Advec|  1 |   138 |UUR     MR|m/s^2           |U momentum tendency from Advection terms
-   138 |Vm_Advec|  1 |   137 |VVR     MR|m/s^2           |V momentum tendency from Advection terms
-   139 |Um_Cori |  1 |   140 |UUR     MR|m/s^2           |U momentum tendency from Coriolis term
-   140 |Vm_Cori |  1 |   139 |VVR     MR|m/s^2           |V momentum tendency from Coriolis term
-   141 |Um_dPhiX|  1 |   142 |UUR     MR|m/s^2           |U momentum tendency from Pressure/Potential grad
-   142 |Vm_dPhiY|  1 |   141 |VVR     MR|m/s^2           |V momentum tendency from Pressure/Potential grad
-   143 |Um_Ext  |  1 |   144 |UUR     MR|m/s^2           |U momentum tendency from external forcing
-   144 |Vm_Ext  |  1 |   143 |VVR     MR|m/s^2           |V momentum tendency from external forcing
-   145 |botTauX |  1 |   146 |UU      U1|N/m^2           |zonal bottom stress, >0 increases uVel
-   146 |botTauY |  1 |   145 |VV      U1|N/m^2           |meridional bottom stress, >0 increases vVel
-   147 |ADVx_Um |  1 |   148 |UM      MR|m^4/s^2         |Zonal      Advective Flux of U momentum
-   148 |ADVy_Um |  1 |   147 |VZ      MR|m^4/s^2         |Meridional Advective Flux of U momentum
-   149 |ADVrE_Um|  1 |       |WU      LR|m^4/s^2         |Vertical   Advective Flux of U momentum (Explicit part)
-   150 |ADVx_Vm |  1 |   151 |UZ      MR|m^4/s^2         |Zonal      Advective Flux of V momentum
-   151 |ADVy_Vm |  1 |   150 |VM      MR|m^4/s^2         |Meridional Advective Flux of V momentum
-   152 |ADVrE_Vm|  1 |       |WV      LR|m^4/s^2         |Vertical   Advective Flux of V momentum (Explicit part)
-   153 |VISCx_Um|  1 |   154 |UM      MR|m^4/s^2         |Zonal      Viscous Flux of U momentum
-   154 |VISCy_Um|  1 |   153 |VZ      MR|m^4/s^2         |Meridional Viscous Flux of U momentum
-   155 |VISrE_Um|  1 |       |WU      LR|m^4/s^2         |Vertical   Viscous Flux of U momentum (Explicit part)
-   156 |VISrI_Um|  1 |       |WU      LR|m^4/s^2         |Vertical   Viscous Flux of U momentum (Implicit part)
-   157 |VISCx_Vm|  1 |   158 |UZ      MR|m^4/s^2         |Zonal      Viscous Flux of V momentum
-   158 |VISCy_Vm|  1 |   157 |VM      MR|m^4/s^2         |Meridional Viscous Flux of V momentum
-   159 |VISrE_Vm|  1 |       |WV      LR|m^4/s^2         |Vertical   Viscous Flux of V momentum (Explicit part)
-   160 |VISrI_Vm|  1 |       |WV      LR|m^4/s^2         |Vertical   Viscous Flux of V momentum (Implicit part)
+   101 |gT_Forc |  1 |       |SMR     MR|degC/s          |Potential Temp. forcing tendency
+   102 |gS_Forc |  1 |       |SMR     MR|psu/s           |Salinity forcing tendency
+   103 |AB_gT   |  1 |       |SMR     MR|degC/s          |Potential Temp. tendency from Adams-Bashforth
+   104 |AB_gS   |  1 |       |SMR     MR|psu/s           |Salinity tendency from Adams-Bashforth
+   105 |gTinAB  |  1 |       |SMR     MR|degC/s          |Potential Temp. tendency going in Adams-Bashforth
+   106 |gSinAB  |  1 |       |SMR     MR|psu/s           |Salinity tendency going in Adams-Bashforth
+   107 |AB_gU   |  1 |   108 |UUR     MR|m/s^2           |U momentum tendency from Adams-Bashforth
+   108 |AB_gV   |  1 |   107 |VVR     MR|m/s^2           |V momentum tendency from Adams-Bashforth
+   109 |ADVr_TH |  1 |       |WM      LR|degC.m^3/s      |Vertical   Advective Flux of Pot.Temperature
+   110 |ADVx_TH |  1 |   111 |UU      MR|degC.m^3/s      |Zonal      Advective Flux of Pot.Temperature
+   111 |ADVy_TH |  1 |   110 |VV      MR|degC.m^3/s      |Meridional Advective Flux of Pot.Temperature
+   112 |DFrE_TH |  1 |       |WM      LR|degC.m^3/s      |Vertical Diffusive Flux of Pot.Temperature (Explicit part)
+   113 |DFxE_TH |  1 |   114 |UU      MR|degC.m^3/s      |Zonal      Diffusive Flux of Pot.Temperature
+   114 |DFyE_TH |  1 |   113 |VV      MR|degC.m^3/s      |Meridional Diffusive Flux of Pot.Temperature
+   115 |DFrI_TH |  1 |       |WM      LR|degC.m^3/s      |Vertical Diffusive Flux of Pot.Temperature (Implicit part)
+   116 |ADVr_SLT|  1 |       |WM      LR|psu.m^3/s       |Vertical   Advective Flux of Salinity
+   117 |ADVx_SLT|  1 |   118 |UU      MR|psu.m^3/s       |Zonal      Advective Flux of Salinity
+   118 |ADVy_SLT|  1 |   117 |VV      MR|psu.m^3/s       |Meridional Advective Flux of Salinity
+   119 |DFrE_SLT|  1 |       |WM      LR|psu.m^3/s       |Vertical Diffusive Flux of Salinity    (Explicit part)
+   120 |DFxE_SLT|  1 |   121 |UU      MR|psu.m^3/s       |Zonal      Diffusive Flux of Salinity
+   121 |DFyE_SLT|  1 |   120 |VV      MR|psu.m^3/s       |Meridional Diffusive Flux of Salinity
+   122 |DFrI_SLT|  1 |       |WM      LR|psu.m^3/s       |Vertical Diffusive Flux of Salinity    (Implicit part)
+   123 |SALTFILL|  1 |       |SM      MR|psu.m^3/s       |Filling of Negative Values of Salinity
+   124 |VISCAHZ |  1 |       |SZ      MR|m^2/s           |Harmonic Visc Coefficient (m2/s) (Zeta Pt)
+   125 |VISCA4Z |  1 |       |SZ      MR|m^4/s           |Biharmonic Visc Coefficient (m4/s) (Zeta Pt)
+   126 |VISCAHD |  1 |       |SM      MR|m^2/s           |Harmonic Viscosity Coefficient (m2/s) (Div Pt)
+   127 |VISCA4D |  1 |       |SM      MR|m^4/s           |Biharmonic Viscosity Coefficient (m4/s) (Div Pt)
+   128 |VISCAHW |  1 |       |WM      LR|m^2/s           |Harmonic Viscosity Coefficient (m2/s) (W Pt)
+   129 |VISCA4W |  1 |       |WM      LR|m^4/s           |Biharmonic Viscosity Coefficient (m4/s) (W Pt)
+   130 |VAHZMAX |  1 |       |SZ      MR|m^2/s           |CFL-MAX Harm Visc Coefficient (m2/s) (Zeta Pt)
+   131 |VA4ZMAX |  1 |       |SZ      MR|m^4/s           |CFL-MAX Biharm Visc Coefficient (m4/s) (Zeta Pt)
+   132 |VAHDMAX |  1 |       |SM      MR|m^2/s           |CFL-MAX Harm Visc Coefficient (m2/s) (Div Pt)
+   133 |VA4DMAX |  1 |       |SM      MR|m^4/s           |CFL-MAX Biharm Visc Coefficient (m4/s) (Div Pt)
+   134 |VAHZMIN |  1 |       |SZ      MR|m^2/s           |RE-MIN Harm Visc Coefficient (m2/s) (Zeta Pt)
+   135 |VA4ZMIN |  1 |       |SZ      MR|m^4/s           |RE-MIN Biharm Visc Coefficient (m4/s) (Zeta Pt)
+   136 |VAHDMIN |  1 |       |SM      MR|m^2/s           |RE-MIN Harm Visc Coefficient (m2/s) (Div Pt)
+   137 |VA4DMIN |  1 |       |SM      MR|m^4/s           |RE-MIN Biharm Visc Coefficient (m4/s) (Div Pt)
+   138 |VAHZLTH |  1 |       |SZ      MR|m^2/s           |Leith Harm Visc Coefficient (m2/s) (Zeta Pt)
+   139 |VA4ZLTH |  1 |       |SZ      MR|m^4/s           |Leith Biharm Visc Coefficient (m4/s) (Zeta Pt)
+   140 |VAHDLTH |  1 |       |SM      MR|m^2/s           |Leith Harm Visc Coefficient (m2/s) (Div Pt)
+   141 |VA4DLTH |  1 |       |SM      MR|m^4/s           |Leith Biharm Visc Coefficient (m4/s) (Div Pt)
+   142 |VAHZLTHD|  1 |       |SZ      MR|m^2/s           |LeithD Harm Visc Coefficient (m2/s) (Zeta Pt)
+   143 |VA4ZLTHD|  1 |       |SZ      MR|m^4/s           |LeithD Biharm Visc Coefficient (m4/s) (Zeta Pt)
+   144 |VAHDLTHD|  1 |       |SM      MR|m^2/s           |LeithD Harm Visc Coefficient (m2/s) (Div Pt)
+   145 |VA4DLTHD|  1 |       |SM      MR|m^4/s           |LeithD Biharm Visc Coefficient (m4/s) (Div Pt)
+   146 |VAHZSMAG|  1 |       |SZ      MR|m^2/s           |Smagorinsky Harm Visc Coefficient (m2/s) (Zeta Pt)
+   147 |VA4ZSMAG|  1 |       |SZ      MR|m^4/s           |Smagorinsky Biharm Visc Coeff. (m4/s) (Zeta Pt)
+   148 |VAHDSMAG|  1 |       |SM      MR|m^2/s           |Smagorinsky Harm Visc Coefficient (m2/s) (Div Pt)
+   149 |VA4DSMAG|  1 |       |SM      MR|m^4/s           |Smagorinsky Biharm Visc Coeff. (m4/s) (Div Pt)
+   150 |momKE   |  1 |       |SMR     MR|m^2/s^2         |Kinetic Energy (in momentum Eq.)
+   151 |momHDiv |  1 |       |SMR     MR|s^-1            |Horizontal Divergence (in momentum Eq.)
+   152 |momVort3|  1 |       |SZR     MR|s^-1            |3rd component (vertical) of Vorticity
+   153 |Strain  |  1 |       |SZR     MR|s^-1            |Horizontal Strain of Horizontal Velocities
+   154 |Tension |  1 |       |SMR     MR|s^-1            |Horizontal Tension of Horizontal Velocities
+   155 |Stretch |  1 |       |SM      MR|s^-1            |Vortex stretching from QG Leith dynamic viscosity
+   156 |USidDrag|  1 |   157 |UUR     MR|m/s^2           |U momentum tendency from Side Drag
+   157 |VSidDrag|  1 |   156 |VVR     MR|m/s^2           |V momentum tendency from Side Drag
+   158 |Um_Diss |  1 |   159 |UUR     MR|m/s^2           |U momentum tendency from Dissipation (Explicit part)
+   159 |Vm_Diss |  1 |   158 |VVR     MR|m/s^2           |V momentum tendency from Dissipation (Explicit part)
+   160 |Um_ImplD|  1 |   161 |UUR     MR|m/s^2           |U momentum tendency from Dissipation (Implicit part)
+   161 |Vm_ImplD|  1 |   160 |VVR     MR|m/s^2           |V momentum tendency from Dissipation (Implicit part)
+   162 |Um_Advec|  1 |   163 |UUR     MR|m/s^2           |U momentum tendency from Advection terms
+   163 |Vm_Advec|  1 |   162 |VVR     MR|m/s^2           |V momentum tendency from Advection terms
+   164 |Um_Cori |  1 |   165 |UUR     MR|m/s^2           |U momentum tendency from Coriolis term
+   165 |Vm_Cori |  1 |   164 |VVR     MR|m/s^2           |V momentum tendency from Coriolis term
+   166 |Um_dPhiX|  1 |   167 |UUR     MR|m/s^2           |U momentum tendency from Pressure/Potential grad
+   167 |Vm_dPhiY|  1 |   166 |VVR     MR|m/s^2           |V momentum tendency from Pressure/Potential grad
+   168 |Um_Ext  |  1 |   169 |UUR     MR|m/s^2           |U momentum tendency from external forcing
+   169 |Vm_Ext  |  1 |   168 |VVR     MR|m/s^2           |V momentum tendency from external forcing
+   170 |Um_AdvZ3|  1 |   171 |UUR     MR|m/s^2           |U momentum tendency from Vorticity Advection
+   171 |Vm_AdvZ3|  1 |   170 |VVR     MR|m/s^2           |V momentum tendency from Vorticity Advection
+   172 |Um_AdvRe|  1 |   173 |UUR     MR|m/s^2           |U momentum tendency from vertical Advection (Explicit part)
+   173 |Vm_AdvRe|  1 |   172 |VVR     MR|m/s^2           |V momentum tendency from vertical Advection (Explicit part)
+   174 |botTauX |  1 |   175 |UU      U1|N/m^2           |zonal bottom stress, >0 increases uVel
+   175 |botTauY |  1 |   174 |VV      U1|N/m^2           |meridional bottom stress, >0 increases vVel
+   176 |ADVx_Um |  1 |   177 |UM      MR|m^4/s^2         |Zonal      Advective Flux of U momentum
+   177 |ADVy_Um |  1 |   176 |VZ      MR|m^4/s^2         |Meridional Advective Flux of U momentum
+   178 |ADVrE_Um|  1 |       |WU      LR|m^4/s^2         |Vertical   Advective Flux of U momentum (Explicit part)
+   179 |ADVx_Vm |  1 |   180 |UZ      MR|m^4/s^2         |Zonal      Advective Flux of V momentum
+   180 |ADVy_Vm |  1 |   179 |VM      MR|m^4/s^2         |Meridional Advective Flux of V momentum
+   181 |ADVrE_Vm|  1 |       |WV      LR|m^4/s^2         |Vertical   Advective Flux of V momentum (Explicit part)
+   182 |VISCx_Um|  1 |   183 |UM      MR|m^4/s^2         |Zonal      Viscous Flux of U momentum
+   183 |VISCy_Um|  1 |   182 |VZ      MR|m^4/s^2         |Meridional Viscous Flux of U momentum
+   184 |VISrE_Um|  1 |       |WU      LR|m^4/s^2         |Vertical   Viscous Flux of U momentum (Explicit part)
+   185 |VISrI_Um|  1 |       |WU      LR|m^4/s^2         |Vertical   Viscous Flux of U momentum (Implicit part)
+   186 |VISCx_Vm|  1 |   187 |UZ      MR|m^4/s^2         |Zonal      Viscous Flux of V momentum
+   187 |VISCy_Vm|  1 |   186 |VM      MR|m^4/s^2         |Meridional Viscous Flux of V momentum
+   188 |VISrE_Vm|  1 |       |WV      LR|m^4/s^2         |Vertical   Viscous Flux of V momentum (Explicit part)
+   189 |VISrI_Vm|  1 |       |WV      LR|m^4/s^2         |Vertical   Viscous Flux of V momentum (Implicit part)
 ------------------------------------------------------------------------------------
   Num  |<-Name->|Levs|  mate |<- code ->|<--  Units   -->|<- Tile (max=80c)         
 ------------------------------------------------------------------------------------

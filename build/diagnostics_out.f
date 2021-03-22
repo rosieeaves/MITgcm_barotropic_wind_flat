@@ -3332,6 +3332,7 @@ c     COMMON /LOCAL_DIAGNOSTICS_OUT/ qtmp1
       INTEGER prec, nRec, nTimRec
       Real*8     timeRec(2)
       Real*8     tmpLoc
+      LOGICAL glf
 
 C---+----1----+----2----+----3----+----4----+----5----+----6----+----7-|--+----|
 
@@ -3660,6 +3661,18 @@ C--     end of Processing Fld # md
 C--   end loop on lm counter (= averagePeriod)
       ENDDO
 
+      IF (diag_mdsio) THEN
+C-    Note: temporary: since it is a pain to add more arguments to
+C     all MDSIO S/R, uses instead this specific S/R to write only
+C     meta files but with more informations in it.
+            glf = globalFiles
+            nRec = averageCycle(listId)*nfields(listId)
+            CALL MDS_WR_METAFILES(fn, prec, glf, .FALSE.,
+     &              0, 0, nLevOutp, ' ',
+     &              nfields(listId), flds(1,listId),
+     &              nTimRec, timeRec, undefRL,
+     &              nRec, myIter, myThid)
+      ENDIF
 
       RETURN
       END

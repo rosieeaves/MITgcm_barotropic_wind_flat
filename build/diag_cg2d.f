@@ -1925,6 +1925,7 @@ CEOP
       Real*8  s2d(0:sNx+1,0:sNy+1,nSx,nSy)
       Real*8  x2dm(1-OLx:sNx+OLx,1-OLy:sNy+OLy,nSx,nSy)
 
+      IF (debugMode) CALL DEBUG_ENTER('DIAG_CG2D',myThid)
 
 C--   Set matrice main diagnonal:
       DO bj=myByLo(myThid),myByHi(myThid)
@@ -2165,6 +2166,7 @@ C-    use the lowest residual solution (instead of current one <-> last residual
       ENDIF
 c     CALL EXCH_XY_RL( x2d, myThid )
 
+      IF (debugMode) CALL DEBUG_LEAVE('DIAG_CG2D',myThid)
 
       RETURN
       END

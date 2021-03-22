@@ -1895,6 +1895,7 @@ C     psiOri  :: stream-function value at tile origin
 c     CHARACTER*(MAX_LEN_MBUF) msgBuf
 CEOP
 
+      IF (debugMode) CALL DEBUG_ENTER('DIAG_CALC_PSIVEL',myThid)
 
 C--   Initialise
       zeroPsi = iPsi0(1,1).GE.0
@@ -1965,6 +1966,7 @@ C--   step.3 : shift stream-function to satisfy Psi == 0 @ a particular location
         ENDDO
       ENDIF
 
+      IF (debugMode) CALL DEBUG_LEAVE('DIAG_CALC_PSIVEL',myThid)
 
       RETURN
       END

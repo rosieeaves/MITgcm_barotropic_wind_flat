@@ -1872,5 +1872,10 @@ C     e.g. U.0000000100
       fType='RL'
       nNz=Nr
       iRec=1
+      CALL MDS_READ_FIELD(
+     I                     fullName, readBinaryPrec, useCurrentDir,
+     I                     fType, nNz, 1, nNz,
+     O                     field, dummyRS,
+     I                     iRec, myThid )
       RETURN
       END

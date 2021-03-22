@@ -1900,6 +1900,23 @@ C     e.g. U.0000000100
 C
       useCurrentDir = .TRUE.
       fType='RL'
+      IF (nSx.EQ.1.AND.nSy.EQ.1) THEN
+C The hack below replaces MDS_WRITELOCAL with MDS_WRITE_FIELD for
+C single-threaded execution because the former does not support the
+C singleCpuIo option. This is a placeholder until MDS_WRITELOCAL
+C functionality is superseded by pkg/diagnostics.
+         myThid = MAX(myThArg,1)
+         CALL MDS_WRITE_FIELD(
+     I                        fullName, writeBinaryPrec,
+     I                        globalFile, useCurrentDir,
+     I                        fType, nNr, 1, nNr, field, dummyRS,
+     I                        iRec, myIter, myThid )
+      ELSE
+         CALL MDS_WRITELOCAL(
+     I                        fullName, writeBinaryPrec, globalFile,
+     I                        fType, nNr, field, dummyRS,
+     I                        bi, bj, iRec, myIter, myThArg )
+      ENDIF
 
       RETURN
       END

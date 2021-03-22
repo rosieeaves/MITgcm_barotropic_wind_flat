@@ -1879,6 +1879,9 @@ C                    and stagger/synchronous TimeStep
         IF ( seqFlag.EQ.2 ) selectVars = 4
         CALL DIAGNOSTICS_FILL_STATE( selectVars, myIter, myThid )
 
+        IF ( seqFlag.EQ.0 .AND. useGAD ) THEN
+          CALL GAD_DIAGNOSTICS_STATE( myTime, myIter, myThid )
+        ENDIF
 
 
 

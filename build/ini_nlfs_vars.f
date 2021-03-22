@@ -3085,6 +3085,7 @@ CEOP
 
 C---+----1----+----2----+----3----+----4----+----5----+----6----+----7-|--+----|
 
+      IF (debugMode) CALL DEBUG_ENTER('INI_NLFS_VARS',myThid)
 
       DO bj=myByLo(myThid), myByHi(myThid)
        DO bi=myBxLo(myThid), myBxHi(myThid)
@@ -3108,6 +3109,7 @@ C-    end 1rst bi,bj loop.
 C---+----1----+----2----+----3----+----4----+----5----+----6----+----7-|--+----|
 C---+----1----+----2----+----3----+----4----+----5----+----6----+----7-|--+----|
 
+      IF (debugMode) CALL DEBUG_LEAVE('INI_NLFS_VARS',myThid)
 
       RETURN
       END

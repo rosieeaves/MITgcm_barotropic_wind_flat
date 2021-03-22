@@ -3213,9 +3213,8 @@ C     Special custom form: read from files
      &       ' Reading tile:', myTile, ' from file ', fName(1:iLen)
            CALL PRINT_MESSAGE( msgBuf, standardMessageUnit,
      &                         SQUEEZE_RIGHT , myThid )
-           WRITE(msgBuf,'(A)') 'INI_CORI: Needs to compile MDSIO pkg'
-           CALL PRINT_ERROR( msgBuf, myThid )
-           STOP 'ABNORMAL END: S/R INI_CORI'
+           CALL MDS_FACEF_READ_RS( fName, readBinaryPrec, 1,
+     &                             fCoriG, bi, bj, myThid )
 
           ENDDO
          ENDDO

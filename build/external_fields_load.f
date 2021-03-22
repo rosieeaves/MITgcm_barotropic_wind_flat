@@ -3371,6 +3371,14 @@ C--   Now calculate whether it is time to update the forcing arrays
 
       bi = myBxLo(myThid)
       bj = myByLo(myThid)
+      IF ( debugLevel.GE.debLevB ) THEN
+        IF ( myThid .EQ. 1 ) THEN
+        WRITE(standardMessageUnit,'(A,I10,A,4I5,A,2F14.10)')
+     &   ' EXTERNAL_FIELDS_LOAD,', myIter,
+     &   ' : iP,iLd,i0,i1=', intimeP,loadedRec(bi,bj), intime0,intime1,
+     &   ' ; Wght=', bWght, aWght
+        ENDIF
+      ENDIF
 C-    Make no assumption on sequence of calls to EXTERNAL_FIELDS_LOAD ;
 C     This is the correct formulation (works in Adjoint run).
 C     Unfortunatly, produces many recomputations <== not used until it is fixed
@@ -3552,6 +3560,18 @@ C--   Interpolate fu,fv,Qnet,EmPmR,SST,SSS,Qsw
       ENDDO
 
 C-- Print for checking:
+      IF ( debugLevel.GE.debLevC ) THEN
+        IF (  myThid  .EQ. 1 ) THEN
+        WRITE(standardMessageUnit,'(A,1P4E12.4)')
+     &   ' EXTERNAL_FIELDS_LOAD: (fu0,1),fu,fv=',
+     &        taux0(1,sNy,1,1), taux1(1,sNy,1,1),
+     &           fu(1,sNy,1,1),    fv(1,sNy,1,1)
+        WRITE(standardMessageUnit,'(A,1P4E12.4)')
+     &   ' EXTERNAL_FIELDS_LOAD: SST,SSS,Q,E-P=',
+     &          SST(1,sNy,1,1),   SSS(1,sNy,1,1),
+     &         Qnet(1,sNy,1,1), EmPmR(1,sNy,1,1)
+        ENDIF
+      ENDIF
 
 C endif for periodicForcing
       ENDIF

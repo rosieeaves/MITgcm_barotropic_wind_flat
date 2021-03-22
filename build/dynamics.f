@@ -3504,6 +3504,7 @@ C         (1 + dt * K * d_zz) salt[n] = salt*
 C---
 CEOP
 
+      IF (debugMode) CALL DEBUG_ENTER( 'DYNAMICS', myThid )
 
 c     dPhiHydDiagIsOn = .FALSE.
 c     IF ( useDiagnostics )
@@ -3618,6 +3619,13 @@ C        and step forward storing the result in gU, gV, etc...
      O         guDissip, gvDissip,
      I         myTime, myIter, myThid)
            ELSE
+             CALL MOM_VECINV(
+     I         bi,bj,k,iMin,iMax,jMin,jMax,
+     I         kappaRU, kappaRV,
+     I         fVerU(1-OLx,1-OLy,kUp),   fVerV(1-OLx,1-OLy,kUp),
+     O         fVerU(1-OLx,1-OLy,kDown), fVerV(1-OLx,1-OLy,kDown),
+     O         guDissip, gvDissip,
+     I         myTime, myIter, myThid)
            ENDIF
 
 
@@ -3698,8 +3706,23 @@ Cml)
 
       ENDIF
 
+      IF ( debugLevel .GE. debLevD ) THEN
+       CALL DEBUG_STATS_RL(1,EtaN,'EtaN (DYNAMICS)',myThid)
+       CALL DEBUG_STATS_RL(Nr,uVel,'Uvel (DYNAMICS)',myThid)
+       CALL DEBUG_STATS_RL(Nr,vVel,'Vvel (DYNAMICS)',myThid)
+       CALL DEBUG_STATS_RL(Nr,wVel,'Wvel (DYNAMICS)',myThid)
+       CALL DEBUG_STATS_RL(Nr,theta,'Theta (DYNAMICS)',myThid)
+       CALL DEBUG_STATS_RL(Nr,salt,'Salt (DYNAMICS)',myThid)
+       CALL DEBUG_STATS_RL(Nr,gU,'Gu (DYNAMICS)',myThid)
+       CALL DEBUG_STATS_RL(Nr,gV,'Gv (DYNAMICS)',myThid)
+       CALL DEBUG_STATS_RL(Nr,guNm1,'GuNm1 (DYNAMICS)',myThid)
+       CALL DEBUG_STATS_RL(Nr,gvNm1,'GvNm1 (DYNAMICS)',myThid)
+       CALL DEBUG_STATS_RL(Nr,gtNm1,'GtNm1 (DYNAMICS)',myThid)
+       CALL DEBUG_STATS_RL(Nr,gsNm1,'GsNm1 (DYNAMICS)',myThid)
+      ENDIF
 
 
+      IF (debugMode) CALL DEBUG_LEAVE( 'DYNAMICS', myThid )
 
       RETURN
       END

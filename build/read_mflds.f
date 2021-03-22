@@ -2321,6 +2321,19 @@ C-    Initialise variables in common block:
         fldMiss(i) = ' '
       ENDDO
 
+       useCurrentDir = .FALSE.
+       nDims = nSizD
+       nFlds = sizFldList
+       nTimRec = nSizT
+       CALL MDS_READ_META(
+     I               fName,
+     O               simulName,
+     O               titleLine,
+     O               filePrec,
+     U               nDims,   nFlds,   nTimRec,
+     O               dimList, fldList, timList,
+     O               misVal, nRecords, fileIter,
+     I               useCurrentDir, myThid )
 
 C-    evaluate Nb of 3.D fields (used if mix 3-D & 2-D fields in file):
       nFl3D = 0
@@ -3954,6 +3967,12 @@ C--   read in array "field"
         fName = mFldsFile
         useCurrentDir = .FALSE.
         fType = 'RL'
+        CALL MDS_READ_FIELD(
+     I                       fName, fPrec, useCurrentDir,
+     I                       fType, nNz, 1, nNz,
+     O                       field, dummyRS,
+     I                       nj, myThid )
+
       ENDIF
 
       RETURN
@@ -5522,6 +5541,12 @@ C--   read in array "field"
         fName = mFldsFile
         useCurrentDir = .FALSE.
         fType = 'RL'
+        CALL MDS_READ_FIELD(
+     I                       fName, fPrec, useCurrentDir,
+     I                       fType, kSiz, kLo, kHi,
+     O                       field, dummyRS,
+     I                       nj, myThid )
+
       ENDIF
 
       RETURN
@@ -7090,6 +7115,12 @@ C--   read in array "field"
         fName = mFldsFile
         useCurrentDir = .FALSE.
         fType = 'RS'
+        CALL MDS_READ_FIELD(
+     I                       fName, fPrec, useCurrentDir,
+     I                       fType, kSiz, kLo, kHi,
+     O                       dummyRL, field,
+     I                       nj, myThid )
+
       ENDIF
 
       RETURN

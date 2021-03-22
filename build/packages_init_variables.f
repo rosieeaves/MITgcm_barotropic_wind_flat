@@ -1929,12 +1929,18 @@ C     myThid  :: my Thread Id number
       INTEGER myThid
 CEOP
 
+      IF (debugMode)
+     &     CALL DEBUG_ENTER('PACKAGES_INIT_VARIABLES',myThid)
 
       IF ( useDiagnostics ) THEN
         CALL DIAGNOSTICS_INIT_VARIA( myThid )
       ENDIF
 
 
+      IF ( useGAD ) THEN
+        IF (debugMode) CALL DEBUG_CALL('GAD_INIT_VARIA',myThid)
+        CALL GAD_INIT_VARIA( myThid )
+      ENDIF
 
 
 
@@ -1982,6 +1988,8 @@ C--   Initialise pkg/ecco (and related pkgs components)
 C--   Initialise pkg/ctl (and related pkgs components)
 
 
+      IF (debugMode)
+     &     CALL DEBUG_LEAVE('PACKAGES_INIT_VARIABLES',myThid)
 
       RETURN
       END

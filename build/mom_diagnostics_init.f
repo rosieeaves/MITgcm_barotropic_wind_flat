@@ -2059,6 +2059,33 @@ C--   add diagnostics of simple derivative quantities:
       CALL DIAGNOSTICS_ADDTOLIST( diagNum,
      I          diagName, diagCode, diagUnits, diagTitle, 0, myThid )
 
+      diagName  = 'momHDiv '
+      diagTitle = 'Horizontal Divergence (in momentum Eq.)'
+      diagCode  = 'SMR     MR      '
+      diagUnits = 's^-1            '
+      CALL DIAGNOSTICS_ADDTOLIST( diagNum,
+     I          diagName, diagCode, diagUnits, diagTitle, 0, myThid )
+
+      diagName  = 'momVort3'
+      diagTitle = '3rd component (vertical) of Vorticity'
+      diagCode  = 'SZR     MR      '
+      diagUnits = 's^-1            '
+      CALL DIAGNOSTICS_ADDTOLIST( diagNum,
+     I          diagName, diagCode, diagUnits, diagTitle, 0, myThid )
+
+      diagName  = 'Strain  '
+      diagTitle = 'Horizontal Strain of Horizontal Velocities'
+      diagCode  = 'SZR     MR      '
+      diagUnits = 's^-1            '
+      CALL DIAGNOSTICS_ADDTOLIST( diagNum,
+     I          diagName, diagCode, diagUnits, diagTitle, 0, myThid )
+
+      diagName  = 'Tension '
+      diagTitle = 'Horizontal Tension of Horizontal Velocities'
+      diagCode  = 'SMR     MR      '
+      diagUnits = 's^-1            '
+      CALL DIAGNOSTICS_ADDTOLIST( diagNum,
+     I          diagName, diagCode, diagUnits, diagTitle, 0, myThid )
 
       diagName  = 'Stretch '
       diagTitle = 'Vortex stretching from QG Leith dynamic viscosity'
@@ -2160,6 +2187,34 @@ C--   add diagnostics of tendencies from each terms
      I   diagName, diagCode, diagUnits, diagTitle, diagMate, myThid )
       diagName  = 'Vm_Ext  '
       diagTitle = 'V momentum tendency from external forcing'
+      diagCode  = 'VVR     MR      '
+      diagMate  = diagNum
+      CALL DIAGNOSTICS_ADDTOLIST( diagNum,
+     I   diagName, diagCode, diagUnits, diagTitle, diagMate, myThid )
+
+      diagName  = 'Um_AdvZ3'
+      diagTitle = 'U momentum tendency from Vorticity Advection'
+      diagCode  = 'UUR     MR      '
+      diagMate  = diagNum + 2
+      CALL DIAGNOSTICS_ADDTOLIST( diagNum,
+     I   diagName, diagCode, diagUnits, diagTitle, diagMate, myThid )
+      diagName  = 'Vm_AdvZ3'
+      diagTitle = 'V momentum tendency from Vorticity Advection'
+      diagCode  = 'VVR     MR      '
+      diagMate  = diagNum
+      CALL DIAGNOSTICS_ADDTOLIST( diagNum,
+     I   diagName, diagCode, diagUnits, diagTitle, diagMate, myThid )
+
+      diagName  = 'Um_AdvRe'
+      diagTitle = 'U momentum tendency from vertical Advection'
+     &          //' (Explicit part)'
+      diagCode  = 'UUR     MR      '
+      diagMate  = diagNum + 2
+      CALL DIAGNOSTICS_ADDTOLIST( diagNum,
+     I   diagName, diagCode, diagUnits, diagTitle, diagMate, myThid )
+      diagName  = 'Vm_AdvRe'
+      diagTitle = 'V momentum tendency from vertical Advection'
+     &          //' (Explicit part)'
       diagCode  = 'VVR     MR      '
       diagMate  = diagNum
       CALL DIAGNOSTICS_ADDTOLIST( diagNum,

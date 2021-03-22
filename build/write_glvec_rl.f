@@ -1887,6 +1887,10 @@ C     e.g. U.0000000100
       bi = 0
       bj = 0
       iRec = 1
+      CALL MDS_WRITEVEC_LOC(
+     I                       fullName, writeBinaryPrec, ioUnit,
+     I                       fType, sizArr, array, dummyRS,
+     I                       bi, bj, iRec, myIter, myThid )
 
       RETURN
       END
