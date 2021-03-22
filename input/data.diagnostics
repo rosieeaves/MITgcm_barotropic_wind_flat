@@ -17,10 +17,15 @@
 #  fileFlags(n)     : specific code (8c string) for output file "n"
 #--------------------
  &DIAGNOSTICS_LIST
-  fields(1:2,1) = 'UVEL    ','VVEL    ',
+  fields(1,1) = 'PsiVEL    ',
    levels(1,1) = 1.,
    timePhase(1) = 0.,
-   filename(1) = 'diagout1',
+   filename(1) = 'stream',
+  frequency(1) = -5400.,
+  fields(1,2) = 'momKE    ',
+   levels(1,1) = 1.,
+   timePhase(1) = 0.,
+   filename(1) = 'KE',
   frequency(1) = -5400.,
  &
 
