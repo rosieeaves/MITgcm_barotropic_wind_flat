@@ -13,6 +13,7 @@
  saltStepping=.FALSE.,
  useSingleCpuIO=.TRUE.,
  hFacMin=0.1,
+ vectorInvariantMomentum=.TRUE.,
  &
 
 # Elliptic solver parameters
