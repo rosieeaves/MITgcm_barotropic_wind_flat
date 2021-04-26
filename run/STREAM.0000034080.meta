@@ -1,0 +1,14 @@
+ nDims = [   2 ];
+ dimList = [
+   248,    1,  248,
+   248,    1,  248
+ ];
+ dataprec = [ 'float32' ];
+ nrecords = [          1 ];
+ timeStepNumber = [      34080 ];
+ timeInterval = [  1.840320000000E+08 ];
+ missingValue = [ -9.99000000000000E+02 ];
+ nFlds = [    1 ];
+ fldList = {
+ 'PsiVEL  '
+ };
